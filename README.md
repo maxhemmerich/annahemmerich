@@ -43,8 +43,22 @@ follows it rather than inventing anything:
   (zartnan), 22 (flatfix), 30 (hughfrost), 53 (tareklakhrissi), 70px
   (ailsaogden) — a wide spread, and ours sits at the tight end of it.
 - **a text-only nav**, sitting in a line under the name.
-- **captions** set in the portfolio document's own format —
-  *Title, medium, height × width in, year* — under each image.
+- **captions** in the set's own shape: run on as one line, nothing set off but
+  the year. hughfrost writes *Skynet (Next Day 5p.p.m.) Acrylic on panel &
+  plywood 30 × 45cm, 2025*; ailsaogden writes *Camaraderie + Disco Booties
+  Oil, Rubber, collage & diamante 2025*. The dimensions inside the line are
+  Anna's own — inches, height × width, from her portfolio document.
+- **the accent** is the one three of the seven declare: Cargo's
+  `--baseColor-accent`, `#FF0000`, set by hughfrost, zartnan and ailsaogden.
+  It replaces the type colour on hover and nothing else; no surface is tinted.
+- **the page set** is theirs as well — a works grid (flatfix's All-Paintings,
+  Cameron Platter's Drawing, erlendpederkvam's drawings, tareklakhrissi's
+  Works, Nan Zhang's selected works), a text index of works in title order
+  (hughfrost's projects, flatfix's Ephemera), one work to a page, and an
+  about/information page. `_build/ref_structure.js` records both that and the
+  columns: their work grids run 4, 5, 7 and 8 across at 1440 and 1–4 at 390.
+  This site is 4 at 1440 and 2 at 390 — tareklakhrissi's figure, the low end
+  of theirs.
 
 The page ground is pure white, as all seven references declare. An earlier
 build used `#f4f3f0` on the theory that Anna's photographs — taken against a
@@ -75,6 +89,7 @@ off the published JPEGs' own edges.
     node   _build/edge_test.js      measure image-to-ground separation
     node   _build/look.js           capture viewport screenshots to check by eye
     python _build/ref_insets.py     measure the references' page inset off the shots
+    node   _build/ref_structure.js  record the references' page set and columns
 
 `shots.js` fails the run on any horizontal overflow at 1440, 1280 or 390.
 

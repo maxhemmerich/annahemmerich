@@ -14,7 +14,11 @@
                  of that range, not above it.
      colour      none in the interface. The paintings are the only colour on
                  the page. Where a reference uses an accent it replaces the
-                 type colour outright; none of them tints a surface.
+                 type colour outright; none of them tints a surface. Ours is
+                 the accent three of the seven declare outright (#FF0000);
+                 the other two carry their own — erlendpederkvam's link
+                 colour measures #0022FF, Cameron Platter's #00EA00 — so
+                 there is no single accent in the set, only a per-site one.
      chrome      none. No bars, cards, boxes, borders, shadows, radii, icons.
                  Two glyphs appear across the whole set: an up arrow and a
                  return mark.
@@ -38,7 +42,9 @@
   --ink-2: rgba(0,0,0,.60);          /* Cargo's, verbatim                  */
   --ink-3: rgba(0,0,0,.40);          /* in flatfix's own stylesheet        */
   --rule:  rgba(0,0,0,.15);          /* declared by the set, 8 times       */
-  --live:  #ba0606;                  /* sampled from Electric fence       */
+  --live:  #ff0000;                  /* the set's own accent: Cargo's
+                                        --baseColor-accent, declared by
+                                        hughfrost, zartnan and ailsaogden  */
 
   --sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto,
           Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", Arial, sans-serif;

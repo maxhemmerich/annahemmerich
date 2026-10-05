@@ -6,8 +6,9 @@
 
 Design source: the seven reference sites Anna sent (all Cargo), read for their
 shared house style — white ground, one small neutral grotesque, no interface
-chrome, photographs bleeding to the page edge, a text-only nav. The portfolio
-PDF's own caption format is kept verbatim.
+chrome, photographs bleeding to the page edge, a text-only nav, captions run on
+as one line. The caption shape is the set's own (hughfrost's); the dimensions
+inside it are Anna's, in inches, height x width, as in her portfolio PDF.
 
 URLs are RELATIVE, computed from each page's depth. A GitHub Pages project site
 is served from a subpath (/annahemmerich/...), and a root-absolute href like
@@ -61,13 +62,16 @@ def esc(s):
 
 
 def cap(w):
-    """Her portfolio document's caption line, exactly."""
-    return f"{w['title']}, {w['medium']}, {w['dims']}, {w['year']}"
+    """The set's own caption line: run on as one line, only the year set off
+    by a comma. hughfrost does it exactly this way — "Skynet (Next Day
+    5p.p.m.) Acrylic on panel & plywood 30 x 45cm, 2025"; ailsaogden runs
+    title, medium and year together with no punctuation at all."""
+    return f"{w['title']} {w['medium']} {w['dims']}, {w['year']}"
 
 
 def caption_html(w):
     """The same line, with the title held back in the ink colour."""
-    return (f'<b>{esc(w["title"])}</b>, {esc(w["medium"])}, '
+    return (f'<b>{esc(w["title"])}</b> {esc(w["medium"])} '
             f'{esc(w["dims"])}, {w["year"]}')
 
 
@@ -252,8 +256,8 @@ def build_work(idx, prefix="../../"):
 def build_list(prefix="../"):
     rows = []
     for w in WORKS:
-        rows.append(f'    <li><a href="{R(prefix, f"work/{w["slug"]}/")}"><b>{esc(w["title"])}</b>, '
-                    f'{esc(w["medium"])}, {esc(w["dims"])}, {w["year"]}</a></li>')
+        rows.append(f'    <li><a href="{R(prefix, f"work/{w["slug"]}/")}"><b>{esc(w["title"])}</b> '
+                    f'{esc(w["medium"])} {esc(w["dims"])}, {w["year"]}</a></li>')
     body = f"""<main id="main" class="page">
   <h1>List of works</h1>
   <p class="sub">Twenty works, {esc(S['years'])}</p>
