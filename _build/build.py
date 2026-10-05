@@ -103,7 +103,7 @@ def head(title, desc, path, prefix, extra=""):
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
 <link rel="canonical" href="{BASE}{path}">
-<meta name="theme-color" content="#f4f3f0">
+<meta name="theme-color" content="#ffffff">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="{esc(S['name'])}">
 <meta property="og:title" content="{esc(title)}">

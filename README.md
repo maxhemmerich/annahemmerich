@@ -19,23 +19,29 @@ erlendpederkvam, cameronplatter, tareklakhrissi, hughfrost, zartnan,
 ailsaogden — all Cargo). Read together they share one house style, and the site
 follows it rather than inventing anything:
 
-- **white ground.** No tint, no texture, near enough to plain white.
-  `_build/refs/report.md` records what each reference actually declares.
+- **white ground.** Pure `#ffffff`, no tint, no texture, exactly as all seven
+  declare it. `_build/refs/report.md` records what each reference actually
+  declares.
 - **one neutral grotesque at small sizes.** Cargo's own scale is used —
   14.5 / 12 / 11.5px. Regular weight. Nothing is bold-display.
 - **no interface chrome at all.** No bars, cards, boxes, borders, shadows or
   radii. Across all seven references the only glyphs that appear are an up
   arrow and a return mark.
-- **photographs flush to the page edge**, in tight masonry columns.
+- **photographs tight to the page edge** — a ~15px inset at 1440, inside the
+  references' own range (3–20px in five of the seven), in tight masonry
+  columns.
 - **a text-only nav**, sitting in a line under the name.
 - **captions** set in the portfolio document's own format —
   *Title, medium, height × width in, year* — under each image.
 
-The one place the site departs from the references: the page ground is
-`#f4f3f0` rather than `#ffffff`. Anna's paintings are photographed against a
-light wall and several are near-white canvases, so on pure white the
-photographs lose their edge entirely. Measured, every one of the twenty now
-sits 16–67 ΔLuminance clear of the page. See `_build/edge_test.js`.
+The page ground is pure white, as all seven references declare. An earlier
+build used `#f4f3f0` on the theory that Anna's photographs — taken against a
+light wall, several of near-white canvases — would lose their edge on white.
+Measurement says the opposite: the outer 3px ring of all twenty photographs
+sits 23 to 85 ΔLuminance from a white page (median 50), and the off-white
+*reduced* that separation rather than adding to it. The measurement is in
+`_build/edge_test.js`, which samples the rendered page; the same numbers come
+off the published JPEGs' own edges.
 
 ## Adding or changing work
 
@@ -71,33 +77,19 @@ are used whole, as they are in the portfolio document.
 
 ## Deploying
 
-Live now at **https://maxhemmerich.github.io/annahemmerich/** — Pages serves
-`main` at the repo root, no build step.
+Live at **https://annahemmerich.com** — Pages serves `main` at the repo root,
+no build step. HTTPS is enforced, with a Let's Encrypt certificate covering the
+apex and `www`; `http://` and `https://www` both 301 to
+`https://annahemmerich.com/`.
 
-The custom domain is **not** connected yet. `CNAME` is parked at
-`_build/CNAME.for-domain` on purpose: with it in the published tree GitHub
-adopts `annahemmerich.com` and 301s the github.io URL there, and that domain
-still resolves to an unused Shopify store, so nothing would be reachable at all.
-
-To switch it over, both halves in one go:
-
-1. At the domain's DNS panel, replace the current records —
-
-   | type | name | value |
-   |---|---|---|
-   | A | @ | 185.199.108.153 |
-   | A | @ | 185.199.109.153 |
-   | A | @ | 185.199.110.153 |
-   | A | @ | 185.199.111.153 |
-   | CNAME | www | maxhemmerich.github.io |
-
-   The records to remove are an A record pointing at `23.227.38.65` and a
-   `www` CNAME pointing at `shops.myshopify.com` — both are Shopify's. The
-   domain has **no MX records**, so no mail depends on them.
-
-2. `cp _build/CNAME.for-domain CNAME`, set `site.base` to `""` in
-   `_build/works.json`, re-run `python _build/build.py`, commit and push.
-   GitHub then issues the TLS certificate, which takes a few minutes.
+The custom domain is set in the repository's Pages settings and `CNAME` is
+committed (`_build/CNAME.for-domain` is the source of it). One thing worth
+knowing if the certificate ever disappears: GitHub's own domain check can hold
+a stale DNS answer after a provider move, and that silently blocks certificate
+issuance — `Enforce HTTPS` greyed out, and the API answers `The certificate
+does not exist yet`. Re-saving the custom domain in Pages settings, then
+removing and re-adding it, forces a fresh check; a fresh Pages build after that
+triggers issuance in minutes. It is not a DNS problem at that point.
 
 ## Not yet done
 
