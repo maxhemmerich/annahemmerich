@@ -1,0 +1,12 @@
+# Build output and scratch — not part of the site
+.shots/
+__pycache__/
+*.pyc
+
+# The reference sites' own markup and stylesheets, downloaded for reading.
+# Keep the written report; the dumps are re-fetchable with _build/read_refs.py
+_build/refs/*.html
+_build/refs/*.css
+
+# Generated artwork derivatives — rebuild with _build/make_images.py
+# (kept in the repo so the deployed site is self-contained)

@@ -1,0 +1,412 @@
+{
+ "site": {
+  "name": "Anna Hemmerich",
+  "domain": "annahemmerich.com",
+  "email": "hello@annahemmerich.com",
+  "emailIsPlaceholder": true,
+  "bioIsPlaceholder": true,
+  "years": "2025–2026"
+ },
+ "works": [
+  {
+   "n": 1,
+   "slug": "tennis",
+   "title": "Tennis",
+   "medium": "Acrylic and collage on canvas",
+   "dims": "46 × 36 in",
+   "year": 2025,
+   "accent": "#459114",
+   "ar": 0.761,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1218,
+    1600
+   ],
+   "px900": [
+    685,
+    900
+   ]
+  },
+  {
+   "n": 2,
+   "slug": "since-daisies",
+   "title": "Since daisies",
+   "medium": "Acrylic on canvas",
+   "dims": "24 × 18 in",
+   "year": 2026,
+   "accent": "#84221f",
+   "ar": 0.818,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1309,
+    1600
+   ],
+   "px900": [
+    737,
+    900
+   ]
+  },
+  {
+   "n": 3,
+   "slug": "pear-juice",
+   "title": "Pear juice",
+   "medium": "Acrylic on canvas",
+   "dims": "60 × 60 in",
+   "year": 2026,
+   "accent": "#b28924",
+   "ar": 1.038,
+   "span": 6,
+   "span_m": 6,
+   "px1600": [
+    1600,
+    1541
+   ],
+   "px900": [
+    900,
+    867
+   ]
+  },
+  {
+   "n": 4,
+   "slug": "sunset-florida-man",
+   "title": "Sunset florida man",
+   "medium": "Oil on canvas",
+   "dims": "40 × 30 in",
+   "year": 2026,
+   "accent": "#285e81",
+   "ar": 0.707,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1130,
+    1600
+   ],
+   "px900": [
+    636,
+    900
+   ]
+  },
+  {
+   "n": 5,
+   "slug": "personal-highway",
+   "title": "Personal highway",
+   "medium": "Acrylic and collaged wood on panel",
+   "dims": "40 × 19 in",
+   "year": 2025,
+   "accent": "#a67d30",
+   "ar": 0.579,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    926,
+    1600
+   ],
+   "px900": [
+    521,
+    900
+   ]
+  },
+  {
+   "n": 6,
+   "slug": "sounding-yellow-bell",
+   "title": "Sounding yellow bell",
+   "medium": "Acrylic and collaged wood on panel",
+   "dims": "48 × 36 in",
+   "year": 2026,
+   "accent": "#ac882a",
+   "ar": 0.804,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1286,
+    1600
+   ],
+   "px900": [
+    723,
+    900
+   ]
+  },
+  {
+   "n": 7,
+   "slug": "entry-line",
+   "title": "Entry line",
+   "medium": "Acrylic and collage on wood panel",
+   "dims": "39 × 24 in",
+   "year": 2025,
+   "accent": "#965627",
+   "ar": 0.8,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1280,
+    1600
+   ],
+   "px900": [
+    720,
+    900
+   ]
+  },
+  {
+   "n": 8,
+   "slug": "buster",
+   "title": "Buster",
+   "medium": "Acrylic, mixed media, and wood collage on panel",
+   "dims": "21 × 14 in",
+   "year": 2025,
+   "accent": "#ba1d28",
+   "ar": 0.754,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1207,
+    1600
+   ],
+   "px900": [
+    679,
+    900
+   ]
+  },
+  {
+   "n": 9,
+   "slug": "garbage-collector",
+   "title": "Garbage Collector (diptych)",
+   "medium": "Oil on panel",
+   "dims": "42 × 36 in",
+   "year": 2026,
+   "accent": "#a7552f",
+   "ar": 0.899,
+   "span": 6,
+   "span_m": 6,
+   "px1600": [
+    1439,
+    1600
+   ],
+   "px900": [
+    809,
+    900
+   ]
+  },
+  {
+   "n": 10,
+   "slug": "sesick",
+   "title": "Sesick",
+   "medium": "Acrylic and collaged wood on panel",
+   "dims": "40 × 40 in",
+   "year": 2025,
+   "accent": "#bb111a",
+   "ar": 0.983,
+   "span": 6,
+   "span_m": 6,
+   "px1600": [
+    1573,
+    1600
+   ],
+   "px900": [
+    885,
+    900
+   ]
+  },
+  {
+   "n": 11,
+   "slug": "wonder-bus",
+   "title": "Wonder bus (diptych)",
+   "medium": "Acrylic on panel",
+   "dims": "47 × 38 in",
+   "year": 2026,
+   "accent": "#7f233b",
+   "ar": 0.842,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1348,
+    1600
+   ],
+   "px900": [
+    758,
+    900
+   ]
+  },
+  {
+   "n": 12,
+   "slug": "jarvis-tea",
+   "title": "Jarvis Tea",
+   "medium": "Acrylic and collage on canvas",
+   "dims": "60 × 48 in",
+   "year": 2025,
+   "accent": "#0c9962",
+   "ar": 0.826,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1321,
+    1600
+   ],
+   "px900": [
+    743,
+    900
+   ]
+  },
+  {
+   "n": 13,
+   "slug": "machine-for-wilting",
+   "title": "Machine for wilting",
+   "medium": "Acrylic on wood",
+   "dims": "19 × 16 in",
+   "year": 2026,
+   "accent": "#a57631",
+   "ar": 0.833,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1332,
+    1600
+   ],
+   "px900": [
+    749,
+    900
+   ]
+  },
+  {
+   "n": 14,
+   "slug": "electric-fence",
+   "title": "Electric fence",
+   "medium": "Acrylic on canvas",
+   "dims": "40 × 30 in",
+   "year": 2026,
+   "accent": "#a7352f",
+   "ar": 0.707,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1130,
+    1600
+   ],
+   "px900": [
+    636,
+    900
+   ]
+  },
+  {
+   "n": 15,
+   "slug": "hive-knot",
+   "title": "Hive knot",
+   "medium": "Acrylic on canvas",
+   "dims": "62 × 50 in",
+   "year": 2026,
+   "accent": "#a0271f",
+   "ar": 0.814,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1303,
+    1600
+   ],
+   "px900": [
+    733,
+    900
+   ]
+  },
+  {
+   "n": 16,
+   "slug": "depot-drawers",
+   "title": "Depot drawers",
+   "medium": "Acrylic and collage on canvas",
+   "dims": "48 × 36 in",
+   "year": 2025,
+   "accent": "#1c4b99",
+   "ar": 0.769,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1230,
+    1600
+   ],
+   "px900": [
+    692,
+    900
+   ]
+  },
+  {
+   "n": 17,
+   "slug": "sweetie-snow-cap",
+   "title": "Sweetie snow cap",
+   "medium": "Acrylic on wood",
+   "dims": "42 × 40 in",
+   "year": 2026,
+   "accent": "#3a4e9c",
+   "ar": 0.976,
+   "span": 6,
+   "span_m": 6,
+   "px1600": [
+    1562,
+    1600
+   ],
+   "px900": [
+    878,
+    900
+   ]
+  },
+  {
+   "n": 18,
+   "slug": "huckleberry-bush",
+   "title": "Huckleberry bush",
+   "medium": "Acrylic on wood",
+   "dims": "32 × 25 in",
+   "year": 2026,
+   "accent": "#379c86",
+   "ar": 0.798,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1277,
+    1600
+   ],
+   "px900": [
+    718,
+    900
+   ]
+  },
+  {
+   "n": 19,
+   "slug": "purple-propeller",
+   "title": "Purple propeller",
+   "medium": "Acrylic on canvas",
+   "dims": "48 × 48 in",
+   "year": 2026,
+   "accent": "#a31236",
+   "ar": 1.009,
+   "span": 6,
+   "span_m": 6,
+   "px1600": [
+    1600,
+    1585
+   ],
+   "px900": [
+    900,
+    892
+   ]
+  },
+  {
+   "n": 20,
+   "slug": "gosha",
+   "title": "Gosha",
+   "medium": "Acrylic on panel",
+   "dims": "24 × 18 in",
+   "year": 2025,
+   "accent": "#c41238",
+   "ar": 0.79,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1264,
+    1600
+   ],
+   "px900": [
+    711,
+    900
+   ]
+  }
+ ]
+}
