@@ -52,7 +52,9 @@ ABOUT = [
     "Titles point somewhere \u2014 <em>Tennis</em>, <em>Huckleberry bush</em>, "
     "<em>Garbage Collector</em> \u2014 and the painting rarely follows all the way.",
 ]
-BIO = S.get("bio", "").strip()
+# The biography, in Anna's own words. One paragraph, or a list of them.
+_bio = S.get("bio", "")
+BIO = [p.strip() for p in ([_bio] if isinstance(_bio, str) else _bio) if p.strip()]
 EMAIL = S.get("email", "").strip()
 MEDIA = ["Acrylic", "Oil", "Collage", "Cut wood", "Canvas", "Panel", "Board"]
 
@@ -274,7 +276,7 @@ def build_list(prefix="../"):
 
 # ---------------------------------------------------------------- about ---
 def build_about(prefix="../"):
-    bio = f'  <p>{esc(BIO)}</p>\n' if BIO else ""
+    bio = "".join(f'  <p>{esc(p)}</p>\n' for p in BIO)
     body = f"""<main id="main" class="page">
   <h1>About</h1>
   <p>{ABOUT[0]}</p>
@@ -291,7 +293,8 @@ def build_about(prefix="../"):
 </main>
 """
     return (head(f"About \u2014 {S['name']}",
-                 f"About the work of {S['name']}, painting in acrylic, oil and collage.",
+                 f"{S['name']} \u2014 a Canadian painter and collagist in Leipzig, "
+                 f"working in acrylic, oil and collage.",
                  "/about/", prefix) + top(prefix, "about/") + body + tail(prefix))
 
 

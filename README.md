@@ -121,7 +121,10 @@ triggers issuance in minutes. It is not a DNS problem at that point.
 
 ## Not yet done
 
-- The contact address is a placeholder and nothing sends from it.
-- There is no biography. The About page describes the work from the work
-  itself; a paragraph in Anna's own words is still needed.
 - Set `site.base` back to `/annahemmerich` if the custom domain is ever dropped.
+
+The biography is written and live: two paragraphs in Anna's own words, drawn
+from the October 2024 interview with Alexander Archer — Vancouver Island, the
+studio at sixteen, Leipzig, and why she wants the work to stay decorative. It
+lives in `works.json` (`site.bio`, a list of paragraphs) so nothing about the
+site's copy is hard-coded in the builder.
