@@ -40,8 +40,7 @@ META_LINE = ("Painting \u2014 acrylic, oil, collage and cut wood on canvas, pane
              "and board. Twenty works, 2025\u20132026.")
 
 ABOUT = [
-    "Anna Hemmerich is a painter working in acrylic, oil and collage on canvas, "
-    "panel and cut wood.",
+    "Painting in acrylic, oil and collage, on canvas, panel and cut wood.",
     "Each painting starts from a drawn structure \u2014 a net, a fence, a grid, a "
     "scaffold. Then the surface is covered over: flat blocks of paint, pasted "
     "paper, sawn pieces of wood, and outlines laid on last and left to wobble. "
@@ -78,8 +77,7 @@ def R(prefix, path):
 
 
 # ------------------------------------------------------------------ shell ---
-NAV = [("Work", ""), ("List of works", "list-of-works/"),
-       ("About", "about/"), ("Contact", "about/#contact")]
+NAV = [("Work", ""), ("List of works", "list-of-works/"), ("About", "about/")]
 
 
 def navlinks(prefix, current, links=None):
@@ -126,23 +124,28 @@ def head(title, desc, path, prefix, extra=""):
 """
 
 
-def top(prefix, current, as_h1=False):
-    """The one header. A name, a line about the work, a line of links."""
+def top(prefix, current, as_h1=False, meta=False):
+    """The one header. The name, then a line of links.
+
+    The line describing the body of work is passed only by the index. Repeated
+    on every page it reads as boilerplate, and on the work and about pages it
+    says something the page itself already says."""
     name = f'<a href="{prefix or "./"}">{esc(S["name"])}</a>'
     tag = "h1" if as_h1 else "p"
+    meta_html = f'\n  <p class="top__meta">{esc(META_LINE)}</p>' if meta else ""
     return f"""<header class="top" id="top">
-  <{tag} class="name">{name}</{tag}>
-  <p class="top__meta">{esc(META_LINE)}</p>
+  <{tag} class="name">{name}</{tag}>{meta_html}
   {nav(prefix, current)}
 </header>
 """
 
 
 def tail(prefix):
+    """The footer carries the one thing the nav does not: a way to write to her."""
     return f"""<footer class="tail">
   <span>&copy; {YEAR} {esc(S['name'])}</span>
   <span>All works remain the property of the artist</span>
-  <span><a href="{R(prefix, 'list-of-works/')}">List of works</a></span>
+  <span><a href="mailto:{esc(EMAIL)}">{esc(EMAIL)}</a></span>
 </footer>
 """
 
@@ -198,7 +201,7 @@ def build_home(prefix=""):
             "panel and cut wood. Twenty works, 2025\u20132026.")
     return (head(title, desc, "/", prefix,
                  f'<script type="application/ld+json">{ld}</script>\n')
-            + top(prefix, "", as_h1=True) + body + tail(prefix))
+            + top(prefix, "", as_h1=True, meta=True) + body + tail(prefix))
 
 
 # ------------------------------------------------------------- work pages ---
@@ -224,7 +227,7 @@ def build_work(idx, prefix="../../"):
     body = f"""<main id="main" class="sheet">
   <div class="sheet__head">
     <p class="name"><a href="{prefix or "./"}">{esc(S['name'])}</a></p>
-    <div class="sheet__nav">{navlinks(prefix, "", links)}</div>
+    <nav class="sheet__nav" aria-label="Sections">{navlinks(prefix, "", links)}</nav>
   </div>
 
   <div class="sheet__body">
@@ -253,7 +256,7 @@ def build_list(prefix="../"):
                     f'{esc(w["medium"])}, {esc(w["dims"])}, {w["year"]}</a></li>')
     body = f"""<main id="main" class="page">
   <h1>List of works</h1>
-  <p class="sub">{esc(S['name'])} \u2014 {esc(S['years'])}</p>
+  <p class="sub">Twenty works, {esc(S['years'])}</p>
   <ol class="olist">
 {chr(10).join(rows)}
   </ol>
@@ -269,8 +272,7 @@ def build_list(prefix="../"):
 def build_about(prefix="../"):
     bio = f'  <p>{esc(BIO)}</p>\n' if BIO else ""
     body = f"""<main id="main" class="page">
-  <h1>{esc(S['name'])}</h1>
-  <p class="sub">Painting \u2014 acrylic, oil, collage and cut wood</p>
+  <h1>About</h1>
   <p>{ABOUT[0]}</p>
   <p>{ABOUT[1]}</p>
   <p>{ABOUT[2]}</p>
@@ -279,10 +281,9 @@ def build_about(prefix="../"):
 {chr(10).join(f'    <li>{esc(m)}</li>' for m in MEDIA)}
   </ul>
 
-  <h2 id="contact">Contact</h2>
+  <h2>Contact</h2>
   <p>For enquiries about the work, exhibitions, or the full list of works with
   prices: <a href="mailto:{esc(EMAIL)}">{esc(EMAIL)}</a></p>
-  <p><a href="{R(prefix, "list-of-works/")}">List of works</a></p>
 </main>
 """
     return (head(f"About \u2014 {S['name']}",
@@ -308,8 +309,7 @@ def build_404():
 """
     return (head("Not found", "Page not found.", "/404.html", proot)
             + f'<header class="top" id="top"><p class="name">'
-              f'<a href="{b}/">{esc(S["name"])}</a></p>'
-              f'<p class="top__meta">{esc(META_LINE)}</p></header>\n'
+              f'<a href="{b}/">{esc(S["name"])}</a></p></header>\n'
             + body + tail(proot))
 
 
