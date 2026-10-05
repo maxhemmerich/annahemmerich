@@ -6,8 +6,15 @@
 
 Design source: the seven reference sites Anna sent (all Cargo), read for their
 shared house style — white ground, one small neutral grotesque, no interface
-chrome, images bleeding to the page edge, a text-only nav. The portfolio PDF's
-own caption format is kept verbatim.
+chrome, photographs bleeding to the page edge, a text-only nav. The portfolio
+PDF's own caption format is kept verbatim.
+
+URLs are RELATIVE, computed from each page's depth. A GitHub Pages project site
+is served from a subpath (/annahemmerich/...), and a root-absolute href like
+/assets/css/site.css then points outside the site. That failure is silent in a
+local preview served from / — it cost a live deploy with no stylesheet.
+Absolute URLs are used only in <link rel="canonical">, og:url, the sitemap and
+robots.txt, where they are meant to name the real domain.
 
 Content source of truth: _build/works.json
 """
@@ -21,6 +28,10 @@ S = DATA["site"]
 WORKS = DATA["works"]
 DOMAIN = S["domain"]
 BASE = f"https://{DOMAIN}"
+# Where the site is served from right now. '/annahemmerich' on the Pages
+# project URL, '' once the custom domain is live. Only the 404 page needs it,
+# because a 404 can be hit at any depth, so relative links are not safe there.
+PROJECT_BASE = S.get("base", "")
 NOW = datetime.date.today().isoformat()
 YEAR = datetime.date.today().year
 
@@ -61,12 +72,31 @@ def caption_html(w):
             f'{esc(w["dims"])}, {w["year"]}')
 
 
+def R(prefix, path):
+    """A URL to a site-root-relative path, relative to a page at `prefix`."""
+    return prefix + path.lstrip("/")
+
+
 # ------------------------------------------------------------------ shell ---
-NAV = [("Work", "/"), ("List of works", "/list-of-works/"),
-       ("About", "/about/"), ("Contact", "/about/#contact")]
+NAV = [("Work", ""), ("List of works", "list-of-works/"),
+       ("About", "about/"), ("Contact", "about/#contact")]
 
 
-def head(title, desc, path, extra=""):
+def navlinks(prefix, current, links=None):
+    out = []
+    for label, href in (links or NAV):
+        cur = ' aria-current="page"' if (href == current and "#" not in href) else ""
+        target = R(prefix, href) if href else (prefix or "./")
+        out.append(f'<a href="{target}"{cur}>{esc(label)}</a>')
+    return "".join(out)
+
+
+def nav(prefix, current, cls="top__nav", links=None):
+    return (f'<nav class="{cls}" aria-label="Sections">'
+            f'{navlinks(prefix, current, links)}</nav>')
+
+
+def head(title, desc, path, prefix, extra=""):
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -88,67 +118,59 @@ def head(title, desc, path, extra=""):
 <meta name="twitter:title" content="{esc(title)}">
 <meta name="twitter:description" content="{esc(desc)}">
 <meta name="twitter:image" content="{BASE}/assets/og.jpg">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="icon" href="{R(prefix, 'favicon.svg')}" type="image/svg+xml">
+<link rel="stylesheet" href="{R(prefix, 'assets/css/site.css')}">
 {extra}</head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 """
 
 
-def navlinks(current, links=None):
-    out = []
-    for label, href in (links or NAV):
-        cur = ' aria-current="page"' if (href == current and "#" not in href) else ""
-        out.append(f'<a href="{href}"{cur}>{esc(label)}</a>')
-    return "".join(out)
-
-
-def nav(current, cls="top__nav", links=None):
-    return f'<nav class="{cls}" aria-label="Sections">{navlinks(current, links)}</nav>'
-
-
-def top(current):
+def top(prefix, current, as_h1=False):
     """The one header. A name, a line about the work, a line of links."""
+    name = f'<a href="{prefix or "./"}">{esc(S["name"])}</a>'
+    tag = "h1" if as_h1 else "p"
     return f"""<header class="top" id="top">
-  <h1 class="name"><a href="/">{esc(S['name'])}</a></h1>
+  <{tag} class="name">{name}</{tag}>
   <p class="top__meta">{esc(META_LINE)}</p>
-  {nav(current)}
+  {nav(prefix, current)}
 </header>
 """
 
 
-def tail():
+def tail(prefix):
     return f"""<footer class="tail">
   <span>&copy; {YEAR} {esc(S['name'])}</span>
   <span>All works remain the property of the artist</span>
-  <span><a href="/list-of-works/">List of works</a></span>
+  <span><a href="{R(prefix, 'list-of-works/')}">List of works</a></span>
 </footer>
 """
 
 
-def picture(w, sizes, loading="lazy"):
+def picture(w, prefix, sizes, loading="lazy"):
     """webp + jpeg, intrinsic size, no layout shift."""
     w_attr, h_attr = (w.get("px1600") or [1600, 1200])
+    art = R(prefix, "assets/art/")
     return (
         f'<picture>'
         f'<source type="image/webp" sizes="{sizes}" '
-        f'srcset="/assets/art/{w["slug"]}-900.webp 900w, /assets/art/{w["slug"]}-1600.webp 1600w">'
-        f'<img src="/assets/art/{w["slug"]}-900.jpg" sizes="{sizes}" '
-        f'srcset="/assets/art/{w["slug"]}-900.jpg 900w, /assets/art/{w["slug"]}-1600.jpg 1600w" '
+        f'srcset="{art}{w["slug"]}-900.webp 900w, {art}{w["slug"]}-1600.webp 1600w">'
+        f'<img src="{art}{w["slug"]}-900.jpg" sizes="{sizes}" '
+        f'srcset="{art}{w["slug"]}-900.jpg 900w, {art}{w["slug"]}-1600.jpg 1600w" '
         f'width="{w_attr}" height="{h_attr}" alt="{esc(cap(w))}" '
         f'loading="{loading}" decoding="async">'
         f'</picture>')
 
 
 # ------------------------------------------------------------------- home ---
-def build_home():
+def build_home(prefix=""):
     figs = []
     for w in WORKS:
+        href = R(prefix, f"work/{w['slug']}/")
         figs.append(
             f'    <figure>\n'
-            f'      <a href="/work/{w["slug"]}/">{picture(w, "(max-width:699px) 48vw, (max-width:1079px) 32vw, (max-width:1499px) 24vw, 19vw")}</a>\n'
-            f'      <figcaption><a href="/work/{w["slug"]}/">{caption_html(w)}</a></figcaption>\n'
+            f'      <a href="{href}">{picture(w, prefix, "(max-width:699px) 48vw, (max-width:1079px) 32vw, (max-width:1779px) 24vw, 19vw")}</a>\n'
+            f'      <figcaption><a href="{href}">{caption_html(w)}</a></figcaption>\n'
             f'    </figure>')
 
     ld = json.dumps({
@@ -174,13 +196,13 @@ def build_home():
     title = f"{S['name']} \u2014 Painting"
     desc = ("Paintings by Anna Hemmerich \u2014 acrylic, oil and collage on canvas, "
             "panel and cut wood. Twenty works, 2025\u20132026.")
-    return (head(title, desc, "/",
+    return (head(title, desc, "/", prefix,
                  f'<script type="application/ld+json">{ld}</script>\n')
-            + top("/") + body + tail())
+            + top(prefix, "", as_h1=True) + body + tail(prefix))
 
 
 # ------------------------------------------------------------- work pages ---
-def build_work(idx):
+def build_work(idx, prefix="../../"):
     w = WORKS[idx]
     prev = WORKS[idx - 1] if idx > 0 else WORKS[-1]
     nxt = WORKS[(idx + 1) % len(WORKS)]
@@ -198,35 +220,36 @@ def build_work(idx):
         "isPartOf": {"@type": "CollectionPage", "name": f"{S['name']} \u2014 Work", "url": f"{BASE}/"},
     }, ensure_ascii=False)
 
+    links = [("Work", ""), ("List of works", "list-of-works/"), ("About", "about/")]
     body = f"""<main id="main" class="sheet">
   <div class="sheet__head">
-    <a class="name" href="/">{esc(S['name'])}</a>
-    <div class="sheet__nav">{navlinks('/', [('Work', '/'), ('List of works', '/list-of-works/'), ('About', '/about/')])}</div>
+    <p class="name"><a href="{prefix or "./"}">{esc(S['name'])}</a></p>
+    <div class="sheet__nav">{navlinks(prefix, "", links)}</div>
   </div>
 
   <div class="sheet__body">
-    <a href="/assets/art/{w['slug']}-1600.jpg">{picture(w, '(max-width:1100px) 92vw, 78vw', loading='eager')}</a>
-    <p class="sheet__cap">{caption_html(w)}</p>
+    <a href="{R(prefix, f"assets/art/{w['slug']}-1600.jpg")}">{picture(w, prefix, '(max-width:1100px) 92vw, 78vw', loading='eager')}</a>
+    <h1 class="sheet__cap">{caption_html(w)}</h1>
   </div>
 
   <div class="sheet__foot">
-    <a href="/work/{prev['slug']}/">&#8592; {esc(prev['title'])}</a>
-    <span>{w['n']} / {len(WORKS)}</span>
-    <a href="/work/{nxt['slug']}/">{esc(nxt['title'])} &#8594;</a>
+    <a href="{R(prefix, f"work/{prev['slug']}/")}">&#8592; {esc(prev['title'])}</a>
+    <span>{w['n']} of {len(WORKS)}</span>
+    <a href="{R(prefix, f"work/{nxt['slug']}/")}">{esc(nxt['title'])} &#8594;</a>
   </div>
 </main>
 """
     return (head(f"{w['title']} \u2014 {S['name']}", f"{cap(w)}. Painting by Anna Hemmerich.",
-                 f"/work/{w['slug']}/",
+                 f"/work/{w['slug']}/", prefix,
                  f'<script type="application/ld+json">{ld}</script>\n')
-            + body + tail())
+            + body + tail(prefix))
 
 
 # --------------------------------------------------------- list of works ---
-def build_list():
+def build_list(prefix="../"):
     rows = []
     for w in WORKS:
-        rows.append(f'    <li><a href="/work/{w["slug"]}/"><b>{esc(w["title"])}</b>, '
+        rows.append(f'    <li><a href="{R(prefix, f"work/{w["slug"]}/")}"><b>{esc(w["title"])}</b>, '
                     f'{esc(w["medium"])}, {esc(w["dims"])}, {w["year"]}</a></li>')
     body = f"""<main id="main" class="page">
   <h1>List of works</h1>
@@ -234,17 +257,16 @@ def build_list():
   <ol class="olist">
 {chr(10).join(rows)}
   </ol>
-  <p style="margin-top:2em;font-size:var(--fs-cap);color:var(--ink-3)">
-    Dimensions are in inches, height &#215; width. The full list with prices is available on request.</p>
+  <p class="note">Dimensions are in inches, height &#215; width. The full list with prices is available on request.</p>
 </main>
 """
     return (head(f"List of works \u2014 {S['name']}",
                  f"The full list of works by {S['name']}, 2025\u20132026.",
-                 "/list-of-works/") + top("/list-of-works/") + body + tail())
+                 "/list-of-works/", prefix) + top(prefix, "list-of-works/") + body + tail(prefix))
 
 
 # ---------------------------------------------------------------- about ---
-def build_about():
+def build_about(prefix="../"):
     bio = f'  <p>{esc(BIO)}</p>\n' if BIO else ""
     body = f"""<main id="main" class="page">
   <h1>{esc(S['name'])}</h1>
@@ -260,24 +282,35 @@ def build_about():
   <h2 id="contact">Contact</h2>
   <p>For enquiries about the work, exhibitions, or the full list of works with
   prices: <a href="mailto:{esc(EMAIL)}">{esc(EMAIL)}</a></p>
-  <p><a href="/list-of-works/">List of works</a></p>
+  <p><a href="{R(prefix, "list-of-works/")}">List of works</a></p>
 </main>
 """
     return (head(f"About \u2014 {S['name']}",
                  f"About the work of {S['name']}, painting in acrylic, oil and collage.",
-                 "/about/") + top("/about/") + body + tail())
+                 "/about/", prefix) + top(prefix, "about/") + body + tail(prefix))
 
 
 # ------------------------------------------------------------------ 404 ---
 def build_404():
-    body = """<main id="main" class="page">
+    """A 404 can be served at any depth, so relative links are not safe here.
+    This is the one page that uses paths absolute to the project root, and
+    PROJECT_BASE is the single value that changes when the domain goes live."""
+    b = PROJECT_BASE or ""
+    proot = f"{PROJECT_BASE}/"
+    links = (f'<a href="{b}/">Work</a> &nbsp; '
+             f'<a href="{b}/list-of-works/">List of works</a> &nbsp; '
+             f'<a href="{b}/about/">About</a>')
+    body = f"""<main id="main" class="page">
   <h1>404</h1>
   <p class="sub">That page isn't here.</p>
-  <p><a href="/">Work</a> &nbsp; <a href="/list-of-works/">List of works</a>
-     &nbsp; <a href="/about/">About</a></p>
+  <p>{links}</p>
 </main>
 """
-    return head("Not found", "Page not found.", "/404.html") + top("") + body + tail()
+    return (head("Not found", "Page not found.", "/404.html", proot)
+            + f'<header class="top" id="top"><p class="name">'
+              f'<a href="{b}/">{esc(S["name"])}</a></p>'
+              f'<p class="top__meta">{esc(META_LINE)}</p></header>\n'
+            + body + tail(proot))
 
 
 # ----------------------------------------------------------------- write ---
@@ -290,14 +323,13 @@ def write(path, content):
 
 
 n = 0
-write("index.html", build_home()); n += 1
+write("index.html", build_home("")); n += 1
 for i in range(len(WORKS)):
-    write(f"work/{WORKS[i]['slug']}/index.html", build_work(i)); n += 1
-write("list-of-works/index.html", build_list()); n += 1
-write("about/index.html", build_about()); n += 1
+    write(f"work/{WORKS[i]['slug']}/index.html", build_work(i, "../../")); n += 1
+write("list-of-works/index.html", build_list("../")); n += 1
+write("about/index.html", build_about("../")); n += 1
 write("404.html", build_404()); n += 1
 
-write("CNAME", DOMAIN + "\n")
 write(".nojekyll", "")
 write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {BASE}/sitemap.xml\n")
 urls = ["/"] + [f"/work/{w['slug']}/" for w in WORKS] + ["/list-of-works/", "/about/"]
@@ -307,4 +339,5 @@ write("sitemap.xml",
       + "".join(f'  <url><loc>{BASE}{u}</loc><lastmod>{NOW}</lastmod></url>\n' for u in urls)
       + "</urlset>\n")
 
-print(f"built {n} pages + CNAME/.nojekyll/robots.txt/sitemap.xml")
+print(f"built {n} pages + .nojekyll/robots.txt/sitemap.xml  (page URLs relative,"
+      f" 404 root = {PROJECT_BASE or '/'})")

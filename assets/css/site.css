@@ -190,6 +190,8 @@ hr{ border:0; margin:0 }
 .page p strong{ color:var(--ink); font-weight:400 }
 .page a{ text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--rule) }
 .page a:hover{ color:var(--live); text-decoration-color:var(--live) }
+
+.page .note{ font-size:var(--fs-cap); color:var(--ink-3); margin:2em 0 0 }
 .page h2{ font-size:var(--fs-small); font-weight:400; margin:2.4em 0 .6em; color:var(--ink) }
 
 /* the document's own list page, kept as a list */
