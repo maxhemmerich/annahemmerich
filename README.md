@@ -69,10 +69,39 @@ follow-up trim pass (`_build/trim_wall.py`) started cutting into the canvases.
 The detection is not separable by colour on this body of work. The photographs
 are used whole, as they are in the portfolio document.
 
+## Deploying
+
+Live now at **https://maxhemmerich.github.io/annahemmerich/** — Pages serves
+`main` at the repo root, no build step.
+
+The custom domain is **not** connected yet. `CNAME` is parked at
+`_build/CNAME.for-domain` on purpose: with it in the published tree GitHub
+adopts `annahemmerich.com` and 301s the github.io URL there, and that domain
+still resolves to an unused Shopify store, so nothing would be reachable at all.
+
+To switch it over, both halves in one go:
+
+1. At the domain's DNS panel, replace the current records —
+
+   | type | name | value |
+   |---|---|---|
+   | A | @ | 185.199.108.153 |
+   | A | @ | 185.199.109.153 |
+   | A | @ | 185.199.110.153 |
+   | A | @ | 185.199.111.153 |
+   | CNAME | www | maxhemmerich.github.io |
+
+   The records to remove are an A record pointing at `23.227.38.65` and a
+   `www` CNAME pointing at `shops.myshopify.com` — both are Shopify's. The
+   domain has **no MX records**, so no mail depends on them.
+
+2. `cp _build/CNAME.for-domain CNAME`, set `site.base` to `""` in
+   `_build/works.json`, re-run `python _build/build.py`, commit and push.
+   GitHub then issues the TLS certificate, which takes a few minutes.
+
 ## Not yet done
 
 - The contact address is a placeholder and nothing sends from it.
 - There is no biography. The About page describes the work from the work
   itself; a paragraph in Anna's own words is still needed.
-- The domain still points at an unpublished Shopify store. See the deployment
-  notes.
+- Set `site.base` back to `/annahemmerich` if the custom domain is ever dropped.
