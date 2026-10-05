@@ -22,14 +22,26 @@ follows it rather than inventing anything:
 - **white ground.** Pure `#ffffff`, no tint, no texture, exactly as all seven
   declare it. `_build/refs/report.md` records what each reference actually
   declares.
-- **one neutral grotesque at small sizes.** Cargo's own scale is used —
-  14.5 / 12 / 11.5px. Regular weight. Nothing is bold-display.
+- **one neutral grotesque.** Every size is a Cargo token, read out of the
+  references' own stylesheets: 14.5px body (`--fontSize-default`), 12px for
+  captions, nav and meta (`--fontSize-small`), the name at 22px
+  (`--fontSize-large`). Weight 400 everywhere — the weight Cargo declares for
+  its own typeface. Text colours are theirs as declared:
+  `rgba(0,0,0,.85)` for the ink, `.6`, `.4`, `.15`.
+- **nothing is bold-display.** Measured at 1440, the seven set their own names
+  at 14.4 (flatfix), 15.8 (tareklakhrissi), 17.3 (zartnan), 18.7
+  (erlendpederkvam, ailsaogden) and 23.0px (hughfrost) — 22px is the top of
+  their range, not above it. Cameron Platter's wordmark, at 67.7px, is the one
+  large type in the set, and it is a menu, not a name.
 - **no interface chrome at all.** No bars, cards, boxes, borders, shadows or
   radii. Across all seven references the only glyphs that appear are an up
   arrow and a return mark.
-- **photographs tight to the page edge** — a ~15px inset at 1440, inside the
-  references' own range (3–20px in five of the seven), in tight masonry
-  columns.
+- **photographs tight to the page edge** — a 15px inset at 1440
+  (`clamp(10px, 1.05vw, 17px)`), the same as zartnan's, in tight masonry
+  columns. The seven's own inset, measured off their screenshots at 1440 by
+  `_build/ref_insets.py`, runs 3 (erlendpederkvam), 10 (cameronplatter), 15
+  (zartnan), 22 (flatfix), 30 (hughfrost), 53 (tareklakhrissi), 70px
+  (ailsaogden) — a wide spread, and ours sits at the tight end of it.
 - **a text-only nav**, sitting in a line under the name.
 - **captions** set in the portfolio document's own format —
   *Title, medium, height × width in, year* — under each image.
@@ -62,6 +74,7 @@ off the published JPEGs' own edges.
     node   _build/shots.js          measure every page at three widths
     node   _build/edge_test.js      measure image-to-ground separation
     node   _build/look.js           capture viewport screenshots to check by eye
+    python _build/ref_insets.py     measure the references' page inset off the shots
 
 `shots.js` fails the run on any horizontal overflow at 1440, 1280 or 390.
 

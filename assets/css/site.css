@@ -5,9 +5,13 @@
    read for what they actually do. The shared house style across all seven:
 
      ground      white. #fff, no tint, no bone, no paper texture.
-     type        one neutral grotesque, small. Cargo's own scale
-                 (14.5 / 13.5 / 12 / 17 / 22px). Regular weight, never bold
-                 display type.
+     type        one neutral grotesque, small. Cargo's own scale, all four
+                 values below taken from it: 14.5px body (--fontSize-default),
+                 12px captions and nav (--fontSize-small), the name at 22px
+                 (--fontSize-large). Regular weight, 400 throughout — the same
+                 weight Cargo declares for its own typeface. The seven set
+                 their own names at 14.4-23px, measured; ours matches the top
+                 of that range, not above it.
      colour      none in the interface. The paintings are the only colour on
                  the page. Where a reference uses an accent it replaces the
                  type colour outright; none of them tints a surface.
@@ -30,10 +34,10 @@
      ring of all twenty photographs sits 23 to 85 ΔLuminance from white, and
      the off-white reduced that separation rather than adding to it. */
   --paper: #fff;
-  --ink:   rgba(0,0,0,.86);          /* Cargo's own default text colour   */
-  --ink-2: rgba(0,0,0,.60);
-  --ink-3: rgba(0,0,0,.42);
-  --rule:  rgba(0,0,0,.16);
+  --ink:   rgba(0,0,0,.85);          /* Cargo's own default text colour   */
+  --ink-2: rgba(0,0,0,.60);          /* Cargo's, verbatim                  */
+  --ink-3: rgba(0,0,0,.40);          /* in flatfix's own stylesheet        */
+  --rule:  rgba(0,0,0,.15);          /* declared by the set, 8 times       */
   --live:  #ba0606;                  /* sampled from Electric fence       */
 
   --sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto,
@@ -41,10 +45,12 @@
   --mono: ui-monospace, "SF Mono", Monaco, Menlo, Consolas,
           "Liberation Mono", monospace;
 
-  --fs-name: clamp(19px, 2.6vw, 34px);
-  --fs-base: 14.5px;
-  --fs-small: 12px;
-  --fs-cap: 11.5px;
+  --fs-name: clamp(19px, 2.6vw, 22px);  /* Cargo's --fontSize-large = 22px */
+  --fs-base: 14.5px;                    /* Cargo's --fontSize-default      */
+  --fs-small: 12px;                     /* Cargo's --fontSize-small        */
+  --fs-cap: 12px;                       /* the same token; captions are not
+                                           set smaller than the page's own
+                                           small size in any of the seven    */
 
   --pad: clamp(10px, 1.05vw, 17px);  /* the page's one inset   */
   --gap: clamp(7px, .85vw, 13px);    /* the grid gutter        */
