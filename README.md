@@ -123,8 +123,10 @@ triggers issuance in minutes. It is not a DNS problem at that point.
 
 - Set `site.base` back to `/annahemmerich` if the custom domain is ever dropped.
 
-The biography is written and live: two paragraphs in Anna's own words, drawn
-from the October 2024 interview with Alexander Archer — Vancouver Island, the
-studio at sixteen, Leipzig, and why she wants the work to stay decorative. It
-lives in `works.json` (`site.bio`, a list of paragraphs) so nothing about the
-site's copy is hard-coded in the builder.
+The About page is Anna speaking: two paragraphs in her own words, drawn from
+the October 2024 interview with Alexander Archer — Vancouver Island, the studio
+at sixteen, Leipzig, and why she wants the work to stay decorative. Nothing on
+that page is written *about* her in the third person; the medium tags and the
+contact line are the only other text. The copy lives in `works.json`
+(`site.bio`, a list of paragraphs) so it is hers to edit, and nothing about it
+is hard-coded in the builder.

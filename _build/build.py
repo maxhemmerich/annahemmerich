@@ -40,19 +40,10 @@ YEAR = datetime.date.today().year
 META_LINE = ("Painting \u2014 acrylic, oil, collage and cut wood on canvas, panel "
              "and board. Twenty works, 2025\u20132026.")
 
-ABOUT = [
-    "Painting in acrylic, oil and collage, on canvas, panel and cut wood.",
-    "Each painting starts from a drawn structure \u2014 a net, a fence, a grid, a "
-    "scaffold. Then the surface is covered over: flat blocks of paint, pasted "
-    "paper, sawn pieces of wood, and outlines laid on last and left to wobble. "
-    "The drawing underneath stays half visible.",
-    "The palette is mixed to stay saturated and mostly unmixed \u2014 chartreuse, "
-    "vermilion, cobalt, ochre, hot pink. The structure holds the picture together "
-    "while everything else is stacked on top of it.",
-    "Titles point somewhere \u2014 <em>Tennis</em>, <em>Huckleberry bush</em>, "
-    "<em>Garbage Collector</em> \u2014 and the painting rarely follows all the way.",
-]
-# The biography, in Anna's own words. One paragraph, or a list of them.
+# The About page is Anna speaking, in her own words — nothing written about her
+# in a third person. The facts the page does not say in prose (media) are in the
+# tags list; the biography itself, one paragraph or a list of them, comes from
+# works.json so the copy is hers to edit.
 _bio = S.get("bio", "")
 BIO = [p.strip() for p in ([_bio] if isinstance(_bio, str) else _bio) if p.strip()]
 EMAIL = S.get("email", "").strip()
@@ -279,10 +270,6 @@ def build_about(prefix="../"):
     bio = "".join(f'  <p>{esc(p)}</p>\n' for p in BIO)
     body = f"""<main id="main" class="page">
   <h1>About</h1>
-  <p>{ABOUT[0]}</p>
-  <p>{ABOUT[1]}</p>
-  <p>{ABOUT[2]}</p>
-  <p>{ABOUT[3]}</p>
 {bio}  <ul class="tags">
 {chr(10).join(f'    <li>{esc(m)}</li>' for m in MEDIA)}
   </ul>
