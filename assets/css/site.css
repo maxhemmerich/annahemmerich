@@ -193,7 +193,7 @@ hr{ border:0; margin:0 }
 .sheet__foot span{ color:var(--ink-3) }
 
 /* ==========================================================================
-   Reading pages: the list of works, and about. Plain type, one column.
+   Reading pages: about and the CV. Plain type, one column.
    ========================================================================== */
 .page{
   padding:clamp(18px,3.2vw,42px) var(--pad) clamp(50px,9vw,120px);
@@ -209,23 +209,7 @@ hr{ border:0; margin:0 }
 .page a{ text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--rule) }
 .page a:hover{ color:var(--live); text-decoration-color:var(--live) }
 
-.page .note{ font-size:var(--fs-cap); color:var(--ink-3); margin:2em 0 0 }
 .page h2{ font-size:var(--fs-small); font-weight:400; margin:2.4em 0 .6em; color:var(--ink) }
-
-/* the document's own list page, kept as a list */
-.olist{ list-style:none; margin:0; padding:0; counter-reset:w }
-.olist li{
-  counter-increment:w;
-  display:grid; grid-template-columns:2.6em minmax(0,1fr);
-  padding:4px 0; color:var(--ink-2);
-}
-.olist li::before{
-  content:counter(w) "."; color:var(--ink-3); text-align:right;
-  padding-right:.75em;
-  font-family:var(--mono); font-size:var(--fs-cap);
-}
-.olist b{ font-weight:400; color:var(--ink) }
-.olist a:hover b{ color:var(--live) }
 
 /* touch: give the text links a tappable box without moving the type.
    Keyed on width as well as pointer, so a narrow desktop window and a phone

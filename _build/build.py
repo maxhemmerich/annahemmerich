@@ -19,7 +19,7 @@ robots.txt, where they are meant to name the real domain.
 
 Content source of truth: _build/works.json
 """
-import json, os, datetime, html
+import json, os, datetime, html, shutil
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 with open(os.path.join(ROOT, "_build", "works.json"), encoding="utf-8") as f:
@@ -71,8 +71,10 @@ def R(prefix, path):
 
 
 # ------------------------------------------------------------------ shell ---
-NAV = [("Work", ""), ("List of works", "list-of-works/"), ("CV", "cv/"),
-       ("About", "about/")]
+# The nav Anna asked for: three sections. "List of works" was removed — the
+# index already carries every work as a photograph with its full caption, so
+# the text list was a second copy of the same set.
+NAV = [("Work", ""), ("CV", "cv/"), ("About", "about/")]
 
 
 def navlinks(prefix, current, links=None):
@@ -217,8 +219,7 @@ def build_work(idx, prefix="../../"):
         "isPartOf": {"@type": "CollectionPage", "name": f"{S['name']} \u2014 Work", "url": f"{BASE}/"},
     }, ensure_ascii=False)
 
-    links = [("Work", ""), ("List of works", "list-of-works/"), ("CV", "cv/"),
-             ("About", "about/")]
+    links = [("Work", ""), ("CV", "cv/"), ("About", "about/")]
     body = f"""<main id="main" class="sheet">
   <div class="sheet__head">
     <p class="name"><a href="{prefix or "./"}">{esc(S['name'])}</a></p>
@@ -241,26 +242,6 @@ def build_work(idx, prefix="../../"):
                  f"/work/{w['slug']}/", prefix,
                  f'<script type="application/ld+json">{ld}</script>\n')
             + body + tail(prefix))
-
-
-# --------------------------------------------------------- list of works ---
-def build_list(prefix="../"):
-    rows = []
-    for w in WORKS:
-        rows.append(f'    <li><a href="{R(prefix, f"work/{w["slug"]}/")}"><b>{esc(w["title"])}</b> '
-                    f'{esc(w["medium"])} {esc(w["dims"])}, {w["year"]}</a></li>')
-    body = f"""<main id="main" class="page">
-  <h1>List of works</h1>
-  <p class="sub">Twenty works, {esc(S['years'])}</p>
-  <ol class="olist">
-{chr(10).join(rows)}
-  </ol>
-  <p class="note">Dimensions are in inches, height &#215; width. The full list with prices is available on request.</p>
-</main>
-"""
-    return (head(f"List of works \u2014 {S['name']}",
-                 f"The full list of works by {S['name']}, 2025\u20132026.",
-                 "/list-of-works/", prefix) + top(prefix, "list-of-works/") + body + tail(prefix))
 
 
 # ---------------------------------------------------------------- about ---
@@ -332,7 +313,6 @@ def build_404():
     b = PROJECT_BASE or ""
     proot = f"{PROJECT_BASE}/"
     links = (f'<a href="{b}/">Work</a> &nbsp; '
-             f'<a href="{b}/list-of-works/">List of works</a> &nbsp; '
              f'<a href="{b}/about/">About</a>')
     body = f"""<main id="main" class="page">
   <h1>404</h1>
@@ -359,15 +339,22 @@ n = 0
 write("index.html", build_home("")); n += 1
 for i in range(len(WORKS)):
     write(f"work/{WORKS[i]['slug']}/index.html", build_work(i, "../../")); n += 1
-write("list-of-works/index.html", build_list("../")); n += 1
 write("cv/index.html", build_cv("../")); n += 1
 write("about/index.html", build_about("../")); n += 1
 write("404.html", build_404()); n += 1
 
+# /list-of-works/ is gone (Anna's call: the index already lists every work with
+# its full caption). Drop the stale directory too, so a rebuild cannot leave the
+# old page answering at its own URL — unlinked is not gone on a static host.
+stale = os.path.join(ROOT, "list-of-works")
+if os.path.isdir(stale):
+    shutil.rmtree(stale)
+    print("removed stale list-of-works/")
+
 write(".nojekyll", "")
 write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {BASE}/sitemap.xml\n")
 urls = (["/"] + [f"/work/{w['slug']}/" for w in WORKS]
-        + ["/list-of-works/", "/cv/", "/about/"])
+        + ["/cv/", "/about/"])
 write("sitemap.xml",
       '<?xml version="1.0" encoding="UTF-8"?>\n'
       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'

@@ -5,7 +5,6 @@ time — GitHub Pages serves the repository root directly.
 
     index.html            the index of all twenty works
     work/<slug>/          one page per work
-    list-of-works/        the numbered list, as in the portfolio document
     cv/                   education and selected exhibitions
     about/                Anna in her own words, and contact
     404.html
@@ -43,7 +42,10 @@ follows it rather than inventing anything:
   `_build/ref_insets.py`, runs 3 (erlendpederkvam), 10 (cameronplatter), 15
   (zartnan), 22 (flatfix), 30 (hughfrost), 53 (tareklakhrissi), 70px
   (ailsaogden) — a wide spread, and ours sits at the tight end of it.
-- **a text-only nav**, sitting in a line under the name.
+- **a text-only nav**, sitting in a line under the name: Work, CV, About. The
+  text index of works (hughfrost's projects, flatfix's Ephemera) was built and
+  then dropped at Anna's request — the index already carries all twenty works
+  with their full captions, so it was a second copy of the same set.
 - **captions** in the set's own shape: run on as one line, nothing set off but
   the year. hughfrost writes *Skynet (Next Day 5p.p.m.) Acrylic on panel &
   plywood 30 × 45cm, 2025*; ailsaogden writes *Camaraderie + Disco Booties
@@ -54,8 +56,7 @@ follows it rather than inventing anything:
   It replaces the type colour on hover and nothing else; no surface is tinted.
 - **the page set** is theirs as well — a works grid (flatfix's All-Paintings,
   Cameron Platter's Drawing, erlendpederkvam's drawings, tareklakhrissi's
-  Works, Nan Zhang's selected works), a text index of works in title order
-  (hughfrost's projects, flatfix's Ephemera), one work to a page, and an
+  Works, Nan Zhang's selected works), one work to a page, and an
   about/information page. `_build/ref_structure.js` records both that and the
   columns: their work grids run 4, 5, 7 and 8 across at 1440 and 1–4 at 390.
   This site is 4 at 1440 and 2 at 390 — tareklakhrissi's figure, the low end
@@ -126,8 +127,7 @@ triggers issuance in minutes. It is not a DNS problem at that point.
 
 The CV page carries education and the exhibitions she selected, both lists
 kept exactly as she wrote them; the contact address and Instagram handle on it
-come from the same CV. The exhibition years sit in a mono column, the same
-treatment the numbered list gives its numbers. The biography, the CV and the
+come from the same CV. The biography, the CV and the
 site's email all live in `works.json`.
 
 The About page is Anna speaking: two paragraphs in her own words, drawn from

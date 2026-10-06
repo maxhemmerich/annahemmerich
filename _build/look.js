@@ -9,11 +9,11 @@ const SHOTS = [
   ['home-scroll', '/',               1500, 1000, '.index figure:nth-child(9)'],
   ['work',        '/work/pear-juice/', 1500, 1000, null],
   ['work-tall',   '/work/personal-highway/', 1500, 1000, null],
-  ['list',        '/list-of-works/', 1100, 1000, null],
+  ['cv',          '/cv/',            1100, 1000, null],
   ['about',       '/about/',         1100, 1000, null],
   ['p-home',      '/',                390, 844, null],
   ['p-work',      '/work/pear-juice/',390, 844, null],
-  ['p-list',      '/list-of-works/',  390, 844, null],
+  ['p-cv',        '/cv/',             390, 844, null],
 ];
 
 (async () => {

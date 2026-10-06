@@ -7,7 +7,7 @@ const W = [
   ['desk', 1440, 1000],
   ['phone', 390, 844],
 ];
-const ROUTES = ['/', '/work/pear-juice/', '/work/tennis/', '/list-of-works/', '/about/', '/404.html',
+const ROUTES = ['/', '/work/pear-juice/', '/work/tennis/', '/cv/', '/about/', '/404.html',
                 '/nope-does-not-exist/'];
 
 (async () => {

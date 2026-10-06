@@ -10,8 +10,10 @@ const { chromium } = require('playwright-core');
   let bad = 0;
   const check = (ok, msg) => { if (!ok) bad++; console.log((ok ? '  ok   ' : '  FAIL ') + msg); };
 
-  for (const route of ['', 'work/pear-juice/', 'list-of-works/', 'about/', '404.html']) {
-    await p.goto('http://127.0.0.1:8898/annahemmerich/' + route, { waitUntil: 'load' });
+  for (const route of ['', 'work/pear-juice/', 'cv/', 'about/', '404.html']) {
+    // served from the site root (the custom domain is live, so site.base is "");
+    // run with a local server on 8899: python -m http.server 8899
+    await p.goto('http://127.0.0.1:8899/' + route, { waitUntil: 'load' });
     await p.waitForTimeout(250);
     const m = await p.evaluate(() => {
       const txt = document.body.innerText;

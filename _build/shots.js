@@ -17,7 +17,7 @@ const VIEWPORTS = [
   ['phone', 390, 844],
 ];
 
-const ROUTES = ['/', '/work/pear-juice/', '/list-of-works/', '/about/'];
+const ROUTES = ['/', '/work/pear-juice/', '/cv/', '/about/'];
 
 (async () => {
   fs.mkdirSync(outDir, { recursive: true });
