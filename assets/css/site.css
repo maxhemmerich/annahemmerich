@@ -101,9 +101,15 @@ hr{ border:0; margin:0 }
   letter-spacing:-.015em; line-height:1.06; margin:0;
 }
 .name a:hover{ color:var(--ink) }
-.top__meta{
-  margin:5px 0 0; font-size:var(--fs-small); color:var(--ink-2);
-  max-width:56ch; line-height:1.5;
+/* the CV: a year column, then what happened. Plain type, no rules. */
+.cvlist{ list-style:none; margin:0; padding:0; max-width:62ch }
+.cvlist li{
+  display:grid; grid-template-columns:5.2em minmax(0,1fr);
+  padding:5px 0; color:var(--ink-2);
+}
+.cvlist .yr{
+  color:var(--ink-3); font-family:var(--mono); font-size:var(--fs-cap);
+  text-align:right; padding-right:.35em;
 }
 .top__nav{
   display:flex; flex-wrap:wrap; gap:2px 14px;

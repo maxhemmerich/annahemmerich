@@ -37,9 +37,6 @@ NOW = datetime.date.today().isoformat()
 YEAR = datetime.date.today().year
 
 # ---------------------------------------------------------------- content ---
-META_LINE = ("Painting \u2014 acrylic, oil, collage and cut wood on canvas, panel "
-             "and board. Twenty works, 2025\u20132026.")
-
 # The About page is Anna speaking, in her own words — nothing written about her
 # in a third person. The facts the page does not say in prose (media) are in the
 # tags list; the biography itself, one paragraph or a list of them, comes from
@@ -74,7 +71,8 @@ def R(prefix, path):
 
 
 # ------------------------------------------------------------------ shell ---
-NAV = [("Work", ""), ("List of works", "list-of-works/"), ("About", "about/")]
+NAV = [("Work", ""), ("List of works", "list-of-works/"), ("CV", "cv/"),
+       ("About", "about/")]
 
 
 def navlinks(prefix, current, links=None):
@@ -121,17 +119,16 @@ def head(title, desc, path, prefix, extra=""):
 """
 
 
-def top(prefix, current, as_h1=False, meta=False):
+def top(prefix, current, as_h1=False):
     """The one header. The name, then a line of links.
 
-    The line describing the body of work is passed only by the index. Repeated
-    on every page it reads as boilerplate, and on the work and about pages it
-    says something the page itself already says."""
+    Nothing describes the work up here. Anna's own words: the line that used to
+    sit under the name ("Painting - acrylic, oil, ... twenty works, 2025-2026")
+    was ours, not hers, and the work itself says it."""
     name = f'<a href="{prefix or "./"}">{esc(S["name"])}</a>'
     tag = "h1" if as_h1 else "p"
-    meta_html = f'\n  <p class="top__meta">{esc(META_LINE)}</p>' if meta else ""
     return f"""<header class="top" id="top">
-  <{tag} class="name">{name}</{tag}>{meta_html}
+  <{tag} class="name">{name}</{tag}>
   {nav(prefix, current)}
 </header>
 """
@@ -198,7 +195,7 @@ def build_home(prefix=""):
             "panel and cut wood. Twenty works, 2025\u20132026.")
     return (head(title, desc, "/", prefix,
                  f'<script type="application/ld+json">{ld}</script>\n')
-            + top(prefix, "", as_h1=True, meta=True) + body + tail(prefix))
+            + top(prefix, "", as_h1=True) + body + tail(prefix))
 
 
 # ------------------------------------------------------------- work pages ---
@@ -220,7 +217,8 @@ def build_work(idx, prefix="../../"):
         "isPartOf": {"@type": "CollectionPage", "name": f"{S['name']} \u2014 Work", "url": f"{BASE}/"},
     }, ensure_ascii=False)
 
-    links = [("Work", ""), ("List of works", "list-of-works/"), ("About", "about/")]
+    links = [("Work", ""), ("List of works", "list-of-works/"), ("CV", "cv/"),
+             ("About", "about/")]
     body = f"""<main id="main" class="sheet">
   <div class="sheet__head">
     <p class="name"><a href="{prefix or "./"}">{esc(S['name'])}</a></p>
@@ -285,6 +283,45 @@ def build_about(prefix="../"):
                  "/about/", prefix) + top(prefix, "about/") + body + tail(prefix))
 
 
+# ------------------------------------------------------------------- cv ---
+def build_cv(prefix="../"):
+    """Her CV, as she sent it: education, then the exhibitions she selected."""
+    CV = S.get("cv", {})
+
+    def rows(items, key):
+        out = []
+        for it in items:
+            out.append(f'    <li><span class="yr">{esc(it[key])}</span>'
+                       f'<span>{esc(it["what"])}</span></li>')
+        return chr(10).join(out)
+
+    edu = rows(CV.get("education", []), "years")
+    shows = rows(CV.get("exhibitions", []), "year")
+    ig = S.get("instagram", "").strip()
+    contact = f'<a href="mailto:{esc(EMAIL)}">{esc(EMAIL)}</a>'
+    if ig:
+        contact += (f' \u00b7 <a href="https://www.instagram.com/{esc(ig)}/">'
+                    f'@{esc(ig)}</a>')
+    body = f"""<main id="main" class="page">
+  <h1>CV</h1>
+  <p class="sub">{esc(S['name'])} \u2014 {contact}</p>
+
+  <h2>Education</h2>
+  <ul class="cvlist">
+{edu}
+  </ul>
+
+  <h2>Selected exhibitions</h2>
+  <ul class="cvlist">
+{shows}
+  </ul>
+</main>
+"""
+    return (head(f"CV \u2014 {S['name']}",
+                 f"Education and selected exhibitions \u2014 {S['name']}.",
+                 "/cv/", prefix) + top(prefix, "cv/") + body + tail(prefix))
+
+
 # ------------------------------------------------------------------ 404 ---
 def build_404():
     """A 404 can be served at any depth, so relative links are not safe here.
@@ -321,12 +358,14 @@ write("index.html", build_home("")); n += 1
 for i in range(len(WORKS)):
     write(f"work/{WORKS[i]['slug']}/index.html", build_work(i, "../../")); n += 1
 write("list-of-works/index.html", build_list("../")); n += 1
+write("cv/index.html", build_cv("../")); n += 1
 write("about/index.html", build_about("../")); n += 1
 write("404.html", build_404()); n += 1
 
 write(".nojekyll", "")
 write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {BASE}/sitemap.xml\n")
-urls = ["/"] + [f"/work/{w['slug']}/" for w in WORKS] + ["/list-of-works/", "/about/"]
+urls = (["/"] + [f"/work/{w['slug']}/" for w in WORKS]
+        + ["/list-of-works/", "/cv/", "/about/"])
 write("sitemap.xml",
       '<?xml version="1.0" encoding="UTF-8"?>\n'
       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'

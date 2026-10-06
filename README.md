@@ -6,7 +6,8 @@ time — GitHub Pages serves the repository root directly.
     index.html            the index of all twenty works
     work/<slug>/          one page per work
     list-of-works/        the numbered list, as in the portfolio document
-    about/                about the work, and contact
+    cv/                   education and selected exhibitions
+    about/                Anna in her own words, and contact
     404.html
     assets/art/           the paintings, webp + jpeg, at 900 and 1600
     assets/css/site.css   the whole design
@@ -122,6 +123,12 @@ triggers issuance in minutes. It is not a DNS problem at that point.
 ## Not yet done
 
 - Set `site.base` back to `/annahemmerich` if the custom domain is ever dropped.
+
+The CV page carries education and the exhibitions she selected, both lists
+kept exactly as she wrote them; the contact address and Instagram handle on it
+come from the same CV. The exhibition years sit in a mono column, the same
+treatment the numbered list gives its numbers. The biography, the CV and the
+site's email all live in `works.json`.
 
 The About page is Anna speaking: two paragraphs in her own words, drawn from
 the October 2024 interview with Alexander Archer — Vancouver Island, the studio
