@@ -132,7 +132,8 @@ site's email all live in `works.json`.
 
 The About page is Anna speaking: two paragraphs in her own words, drawn from
 the October 2024 interview with Alexander Archer — Vancouver Island, the studio
-at sixteen, Leipzig, and why she wants the work to stay decorative. Nothing on
+at sixteen, Tampa now (her CV's address, not the interview's Leipzig), and why
+she wants the work to stay decorative. Nothing on
 that page is written *about* her in the third person; the medium tags and the
 contact line are the only other text. The copy lives in `works.json`
 (`site.bio`, a list of paragraphs) so it is hers to edit, and nothing about it

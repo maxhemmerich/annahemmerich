@@ -278,7 +278,7 @@ def build_about(prefix="../"):
 </main>
 """
     return (head(f"About \u2014 {S['name']}",
-                 f"{S['name']} \u2014 a Canadian painter and collagist in Leipzig, "
+                 f"{S['name']} \u2014 a Canadian painter and collagist in Tampa, "
                  f"working in acrylic, oil and collage.",
                  "/about/", prefix) + top(prefix, "about/") + body + tail(prefix))
 
@@ -298,7 +298,9 @@ def build_cv(prefix="../"):
     edu = rows(CV.get("education", []), "years")
     shows = rows(CV.get("exhibitions", []), "year")
     ig = S.get("instagram", "").strip()
-    contact = f'<a href="mailto:{esc(EMAIL)}">{esc(EMAIL)}</a>'
+    city = S.get("city", "").strip()
+    contact = f'{esc(city)} \u00b7 ' if city else ""
+    contact += f'<a href="mailto:{esc(EMAIL)}">{esc(EMAIL)}</a>'
     if ig:
         contact += (f' \u00b7 <a href="https://www.instagram.com/{esc(ig)}/">'
                     f'@{esc(ig)}</a>')
