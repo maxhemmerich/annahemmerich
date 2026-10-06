@@ -15,6 +15,7 @@
   "city": "Tampa, FL",
   "cv": {
    "education": [
+    {"years": "ongoing", "what": "MFA, University of South Florida, Tampa, FL"},
     {"years": "2020\u20132024", "what": "BFA Studies, Nova Scotia College of Art and Design, Halifax, NS"}
    ],
    "exhibitions": [
