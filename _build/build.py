@@ -158,11 +158,11 @@ def top(prefix, current, as_h1=False):
 
 
 def tail(prefix):
-    """The footer carries the one thing the nav does not: a way to write to her."""
+    """The footer: the copyright and the property line. The address was removed
+    at Anna's request — the About and CV pages still carry the contact."""
     return f"""<footer class="tail">
   <span>&copy; {YEAR} {esc(S['name'])}</span>
   <span>All works remain the property of the artist</span>
-  <span><a href="mailto:{esc(EMAIL)}">{esc(EMAIL)}</a></span>
 </footer>
 """
 
