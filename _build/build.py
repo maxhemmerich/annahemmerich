@@ -163,25 +163,35 @@ def picture(w, prefix, sizes, loading="lazy"):
 
 
 # ------------------------------------------------------------------- home ---
-# The stream's year control. Anna's call: the stream is vertical, and the
-# other years sit to its left or right — older years to the left, newer to the
-# right, the year you are in named plainly in the middle. Plain text links, the
-# same small type as the section nav; no buttons, no bar, no arrows.
-def yearbar(prefix, year=None):
-    years = sorted({int(w["year"]) for w in WORKS}, reverse=True)
-    older = [y for y in years if year is not None and y < year]
-    newer = [y for y in years if year is not None and y > year]
-    if year is None:                      # the front: every year is "other"
-        older, newer = years[1:], [years[0]]
-    left = "".join(f'<a href="{R(prefix, f"{y}/")}">{y}</a>' for y in older)
-    right = "".join(f'<a href="{R(prefix, f"{y}/")}">{y}</a>' for y in newer)
-    middle = (f'<span class="cur" aria-current="true">{year}</span>' if year is not None
-              else '<span class="cur" aria-current="true">All</span>')
-    return f'<p class="yearbar">{left}{middle}{right}</p>\n'
+# The stream's year control. Anna's layout: the years flank the painting
+# window — older to the left, newer to the right, each vertically centred
+# against the scroll — and "All" sits outside each of them, so it is to the
+# left of the left year and to the right of the right year. Plain text, the
+# same small type as the section nav; no buttons, no bar, no arrows. Nothing in
+# the seven references has a year control at all: this is ours.
+def year_rails(prefix, year=None):
+    years = sorted({int(w["year"]) for w in WORKS})          # oldest first
+    mid = max(1, (len(years) + 1) // 2)
+    left_years, right_years = years[:mid], years[mid:]
+
+    def ylink(y):
+        if year == y:
+            return f'<span class="cur" aria-current="true">{y}</span>'
+        return f'<a href="{R(prefix, f"{y}/")}">{y}</a>'
+
+    allitem = ('<span class="cur" aria-current="true">All</span>' if year is None
+               else f'<a href="{prefix or "./"}">All</a>')
+    left = "".join(ylink(y) for y in left_years)
+    right = "".join(ylink(y) for y in right_years)
+    return (f'<nav class="rail rail--left" aria-label="Years">\n'
+            f'    {allitem}\n    {left}\n  </nav>\n',
+            f'\n  <nav class="rail rail--right" aria-label="Years">\n'
+            f'    {right}\n    {allitem}\n  </nav>\n')
 
 
 def build_home(prefix="", year=None):
     works = [w for w in WORKS if year is None or int(w["year"]) == year]
+    rail_left, rail_right = year_rails(prefix, year)
     figs = []
     for w in works:
         href = R(prefix, f"work/{w['slug']}/")
@@ -205,9 +215,10 @@ def build_home(prefix="", year=None):
     }, ensure_ascii=False)
 
     body = f"""<main id="main">
-  {yearbar(prefix, year)}  <div class="index">
+  <div class="streamwrap">
+  {rail_left}  <div class="index">
 {chr(10).join(figs)}
-  </div>
+  </div>{rail_right}</div>
   <p class="backtop"><a href="#top">Back to top &#8593;</a></p>
 </main>
 """

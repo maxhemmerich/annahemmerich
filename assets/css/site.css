@@ -157,18 +157,24 @@ hr{ border:0; margin:0 }
    own answer, not an invention: hughfrost's front is exactly this, one work,
    centred, caption beneath, name top-left, nav top-right.
    ========================================================================== */
-/* The stream's year control: the other years sit to the left and right of the
-   year you are in. Plain small text in one row, the same size as the section
-   nav — no buttons, no bar, no arrows. */
-.yearbar{
-  display:grid; grid-template-columns:1fr auto 1fr; align-items:baseline;
-  gap:6px 20px; margin:0;
-  padding:clamp(14px,2vw,26px) var(--pad) 0;   /* inside the page inset, like the name */
-  font-size:var(--fs-small); color:var(--ink-2);
+/* The painting window and the year rails beside it. Anna's layout: the years
+   flank the scroll — older to the left, newer to the right — each vertically
+   centred against it, with "All" outside each of them (left of the left year,
+   right of the right year). Plain small text in the section nav's own size; no
+   buttons, no bar, no arrows. Nothing in the seven references has a year
+   control at all: this one is ours. */
+.streamwrap{
+  flex:1 1 auto; min-height:0;
+  display:grid; grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:stretch; padding:0 var(--pad);
 }
-.yearbar .cur{ grid-column:2; justify-self:center; color:var(--ink-3) }
-.yearbar a:first-child{ grid-column:1; justify-self:start }
-.yearbar a:last-child{ grid-column:3; justify-self:end }
+.rail{
+  display:flex; align-items:center; gap:clamp(10px,1.4vw,22px);
+  font-size:var(--fs-small); color:var(--ink-2); white-space:nowrap;
+}
+.rail--left{ justify-content:flex-start; padding-right:clamp(10px,1.6vw,26px) }
+.rail--right{ justify-content:flex-end; padding-left:clamp(10px,1.6vw,26px) }
+.rail .cur{ color:var(--ink-3) }
 
 .index{
   display:flex; flex-direction:column; align-items:center;
@@ -199,12 +205,15 @@ body.stream #main{ flex:1 1 auto; min-height:0; display:flex; flex-direction:col
 body.stream .index{
   flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain;
   scroll-snap-type:y proximity;
+  padding-left:0; padding-right:0;      /* the rails carry the page inset now */
 }
 body.stream .index figure{ scroll-snap-align:center }
 body.stream .backtop{ text-align:center }
 @media (max-width:699px){
-  /* the whole frame is small on a phone, so give the scroller its own margin
-     and keep the work centred in what is left */
+  /* a phone frame is too narrow for rails beside the paintings: the years move
+     to a line above the scroll and a line below it, All still outside each */
+  .streamwrap{ grid-template-columns:minmax(0,1fr); grid-template-rows:auto minmax(0,1fr) auto }
+  .rail{ justify-content:center; padding:8px 0 }
   body.stream .index{ gap:clamp(40px, 8vh, 90px) }
 }
 .index figcaption b{ color:var(--ink) }
