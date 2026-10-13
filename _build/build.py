@@ -164,11 +164,13 @@ def picture(w, prefix, sizes, loading="lazy"):
 
 # ------------------------------------------------------------------- home ---
 # The stream's year control. Anna's layout: the years flank the painting
-# window — older to the left, newer to the right, each vertically centred
-# against the scroll — and "All" sits outside each of them, so it is to the
-# left of the left year and to the right of the right year. Plain text, the
-# same small type as the section nav; no buttons, no bar, no arrows. Nothing in
-# the seven references has a year control at all: this is ours.
+# window — older to the left, newer to the right, each centred against the
+# scroll. The year you are already in keeps NO button (it is the page you are
+# on), and "All" appears exactly once: to the right of the 2026 slot when 2026
+# is the one showing, to the left of the 2025 slot when 2025 is. On the
+# all-works page both years are links and All keeps no button either, since
+# that page is All. Plain small text, no buttons that look like buttons, no
+# arrows. Nothing in the seven references has a year control at all: ours.
 def year_rails(prefix, year=None):
     years = sorted({int(w["year"]) for w in WORKS})          # oldest first
     mid = max(1, (len(years) + 1) // 2)
@@ -176,17 +178,17 @@ def year_rails(prefix, year=None):
 
     def ylink(y):
         if year == y:
-            return f'<span class="cur" aria-current="true">{y}</span>'
+            return ""                       # the year showing keeps no button
         return f'<a href="{R(prefix, f"{y}/")}">{y}</a>'
 
-    allitem = ('<span class="cur" aria-current="true">All</span>' if year is None
-               else f'<a href="{prefix or "./"}">All</a>')
-    left = "".join(ylink(y) for y in left_years)
-    right = "".join(ylink(y) for y in right_years)
+    allitem = "" if year is None else f'<a href="{prefix or "./"}">All</a>'
+    all_left = (year is not None and year == min(years))     # 2025 showing: All left of it
+    left = (allitem if all_left else "") + "".join(ylink(y) for y in left_years)
+    right = "".join(ylink(y) for y in right_years) + ("" if all_left else allitem)
     return (f'<nav class="rail rail--left" aria-label="Years">\n'
-            f'    {allitem}\n    {left}\n  </nav>\n',
+            f'    {left}\n  </nav>\n',
             f'\n  <nav class="rail rail--right" aria-label="Years">\n'
-            f'    {right}\n    {allitem}\n  </nav>\n')
+            f'    {right}\n  </nav>\n')
 
 
 def build_home(prefix="", year=None):

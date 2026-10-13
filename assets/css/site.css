@@ -138,10 +138,14 @@ hr{ border:0; margin:0 }
   color:var(--ink-3); font-family:var(--mono); font-size:var(--fs-cap);
   text-align:right; padding-right:.35em;
 }
-.top__nav{
-  display:flex; flex-wrap:wrap; gap:2px clamp(34px, 5vw, 76px);
-  font-size:var(--fs-small); margin:0;
+.top{
+  padding:var(--pad) var(--pad) 0;
+  display:flex; align-items:baseline; justify-content:center;
+  gap:clamp(30px, 5vw, 76px); flex-wrap:wrap;
 }
+/* The three links join the name's own row, so the four items — Anna
+   Hemmerich, Work, CV, About — are spaced equally and centred as a group. */
+.top__nav{ display:contents }
 .top__nav a{ color:var(--ink-2) }
 .top__nav a[aria-current="page"]{ color:var(--ink); text-decoration:underline; text-underline-offset:3px }
 .top__nav a:hover{ color:var(--live) }
@@ -176,7 +180,7 @@ hr{ border:0; margin:0 }
 }
 .rail--left{ justify-content:flex-start; padding-right:clamp(10px,1.6vw,26px) }
 .rail--right{ justify-content:flex-end; padding-left:clamp(10px,1.6vw,26px) }
-.rail .cur{ color:var(--ink-3) }
+.rail a{ color:var(--ink-2) }
 
 .index{
   display:flex; flex-direction:column; align-items:center;
@@ -208,7 +212,10 @@ body.stream .index{
   flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain;
   scroll-snap-type:y proximity;
   padding-left:0; padding-right:0;      /* the rails carry the page inset now */
+  scrollbar-width:none;                 /* no wheel/track down the side */
+  -ms-overflow-style:none;
 }
+body.stream .index::-webkit-scrollbar{ width:0; height:0 }
 body.stream .index figure{ scroll-snap-align:center }
 body.stream .backtop{ text-align:center }
 @media (max-width:699px){
