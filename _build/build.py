@@ -19,7 +19,7 @@ robots.txt, where they are meant to name the real domain.
 
 Content source of truth: _build/works.json
 """
-import json, os, datetime, html, shutil
+import json, os, datetime, html, shutil, hashlib
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 with open(os.path.join(ROOT, "_build", "works.json"), encoding="utf-8") as f:
@@ -70,6 +70,26 @@ def R(prefix, path):
     return prefix + path.lstrip("/")
 
 
+def css_href(prefix):
+    """The stylesheet's URL, versioned by the stylesheet's own bytes.
+
+    GitHub Pages serves every asset with a ten-minute cache and headers we
+    cannot set, so without this a visitor can be reading new HTML while still
+    holding an old stylesheet — which is exactly how a shipped change looked
+    like it had not shipped. The query is the first 8 hex of the file's sha256,
+    so any edit to the stylesheet publishes a URL no browser has cached.
+
+    The version is read at BUILD time: edit site.css and you must rebuild
+    (which is the site's rule anyway — the CSS lives beside the generator).
+    """
+    try:
+        with open(os.path.join(ROOT, "assets", "css", "site.css"), "rb") as f:
+            v = hashlib.sha256(f.read()).hexdigest()[:8]
+    except OSError:
+        v = ""
+    return R(prefix, "assets/css/site.css") + (f"?v={v}" if v else "")
+
+
 # ------------------------------------------------------------------ shell ---
 # The nav Anna asked for: three sections. "List of works" was removed — the
 # index already carries every work as a photograph with its full caption, so
@@ -115,7 +135,7 @@ def head(title, desc, path, prefix, extra="", body_class=""):
 <meta name="twitter:description" content="{esc(desc)}">
 <meta name="twitter:image" content="{BASE}/assets/og.jpg">
 <link rel="icon" href="{R(prefix, 'favicon.svg')}" type="image/svg+xml">
-<link rel="stylesheet" href="{R(prefix, 'assets/css/site.css')}">
+<link rel="stylesheet" href="{css_href(prefix)}">
 {extra}</head>
 <body{bc}>
 <a class="skip" href="#main">Skip to content</a>

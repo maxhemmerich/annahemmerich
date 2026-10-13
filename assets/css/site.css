@@ -86,7 +86,14 @@
 
 *,*::before,*::after{ box-sizing:border-box }
 
-html{ -webkit-text-size-adjust:100% }
+html{
+  -webkit-text-size-adjust:100%;
+  /* No wheel down the side of any page: the stream pages scroll in place and
+     hide their own bar, the long pages (CV, a single work) scroll the window
+     without one either. Anna's ask — scrolling is untouched, only the bar. */
+  scrollbar-width:none; -ms-overflow-style:none;
+}
+html::-webkit-scrollbar{ width:0; height:0 }
 
 body{
   margin:0;
@@ -245,13 +252,19 @@ body.stream .backtop{ text-align:center }
   padding:var(--pad) var(--pad) 0;
   display:flex; flex-direction:column; min-height:100svh;
 }
+/* One header on every kind of page — the stream pages, a single work, CV,
+   About. The name and the three section links are one centred row, equally
+   spaced, so no page pushes Work / CV / About off to the right. */
 .sheet__head{
-  display:flex; align-items:baseline; justify-content:space-between;
-  gap:6px 20px; flex-wrap:wrap; font-size:var(--fs-small);
+  display:flex; align-items:baseline; justify-content:center;
+  gap:clamp(30px, 5vw, 76px); flex-wrap:wrap; font-size:var(--fs-small);
   padding-bottom:clamp(8px,1.4vw,20px);
 }
 .sheet__head .name{ font-size:var(--fs-small); letter-spacing:0 }
-.sheet__nav{ display:flex; gap:14px; font-size:var(--fs-small); color:var(--ink-2) }
+.sheet__nav{ display:contents }
+.sheet__nav a{ color:var(--ink-2) }
+.sheet__nav a[aria-current="page"]{ color:var(--ink); text-decoration:underline; text-underline-offset:3px }
+.sheet__nav a:hover{ color:var(--live) }
 .sheet__body{
   flex:1; display:flex; flex-direction:column;
   justify-content:center; align-items:center;
