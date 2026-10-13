@@ -162,9 +162,27 @@ def picture(w, prefix, sizes, loading="lazy"):
 
 
 # ------------------------------------------------------------------- home ---
-def build_home(prefix=""):
+# The stream's year control. Anna's call: the stream is vertical, and the
+# other years sit to its left or right — older years to the left, newer to the
+# right, the year you are in named plainly in the middle. Plain text links, the
+# same small type as the section nav; no buttons, no bar, no arrows.
+def yearbar(prefix, year=None):
+    years = sorted({int(w["year"]) for w in WORKS}, reverse=True)
+    older = [y for y in years if year is not None and y < year]
+    newer = [y for y in years if year is not None and y > year]
+    if year is None:                      # the front: every year is "other"
+        older, newer = years[1:], [years[0]]
+    left = "".join(f'<a href="{R(prefix, f"{y}/")}">{y}</a>' for y in older)
+    right = "".join(f'<a href="{R(prefix, f"{y}/")}">{y}</a>' for y in newer)
+    middle = (f'<span class="cur" aria-current="true">{year}</span>' if year is not None
+              else '<span class="cur" aria-current="true">All</span>')
+    return f'<p class="yearbar">{left}{middle}{right}</p>\n'
+
+
+def build_home(prefix="", year=None):
+    works = [w for w in WORKS if year is None or int(w["year"]) == year]
     figs = []
-    for w in WORKS:
+    for w in works:
         href = R(prefix, f"work/{w['slug']}/")
         figs.append(
             f'    <figure>\n'
@@ -175,27 +193,32 @@ def build_home(prefix=""):
     ld = json.dumps({
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": f"{S['name']} \u2014 Work",
-        "url": f"{BASE}/",
+        "name": (f"{S['name']} \u2014 {year}" if year else f"{S['name']} \u2014 Work"),
+        "url": f"{BASE}/{'' if year is None else str(year) + '/'}",
         "about": {"@type": "Person", "name": S["name"], "jobTitle": "Painter"},
         "hasPart": [{
             "@type": "VisualArtwork", "name": w["title"], "artMedium": w["medium"],
             "dateCreated": str(w["year"]), "url": f"{BASE}/work/{w['slug']}/",
             "image": f"{BASE}/assets/art/{w['slug']}-1600.jpg",
-        } for w in WORKS],
+        } for w in works],
     }, ensure_ascii=False)
 
     body = f"""<main id="main">
-  <div class="index">
+  {yearbar(prefix, year)}  <div class="index">
 {chr(10).join(figs)}
   </div>
   <p class="backtop"><a href="#top">Back to top &#8593;</a></p>
 </main>
 """
-    title = f"{S['name']} \u2014 Painting"
-    desc = ("Paintings by Anna Hemmerich \u2014 acrylic, oil and collage on canvas, "
-            "panel and cut wood. Twenty works, 2025\u20132026.")
-    return (head(title, desc, "/", prefix,
+    if year:
+        title = f"{S['name']} \u2014 {year}"
+        desc = (f"Paintings by Anna Hemmerich \u2014 {len(works)} works from {year}. "
+                "Acrylic, oil and collage on canvas, panel and cut wood.")
+    else:
+        title = f"{S['name']} \u2014 Painting"
+        desc = ("Paintings by Anna Hemmerich \u2014 acrylic, oil and collage on canvas, "
+                "panel and cut wood. Twenty works, 2025\u20132026.")
+    return (head(title, desc, f"/{'' if year is None else str(year) + '/'}", prefix,
                  f'<script type="application/ld+json">{ld}</script>\n')
             + top(prefix, "", as_h1=True) + body + tail(prefix))
 
@@ -337,6 +360,11 @@ def write(path, content):
 
 n = 0
 write("index.html", build_home("")); n += 1
+YEARS = sorted({int(w["year"]) for w in WORKS}, reverse=True)
+for y in YEARS:
+    # one page per year: the same vertical stream, filtered, with the other
+    # years as plain links to its left and right (Anna's call).
+    write(f"{y}/index.html", build_home("../", year=y)); n += 1
 for i in range(len(WORKS)):
     write(f"work/{WORKS[i]['slug']}/index.html", build_work(i, "../../")); n += 1
 write("cv/index.html", build_cv("../")); n += 1
@@ -353,7 +381,7 @@ if os.path.isdir(stale):
 
 write(".nojekyll", "")
 write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {BASE}/sitemap.xml\n")
-urls = (["/"] + [f"/work/{w['slug']}/" for w in WORKS]
+urls = (["/"] + [f"/{y}/" for y in YEARS] + [f"/work/{w['slug']}/" for w in WORKS]
         + ["/cv/", "/about/"])
 write("sitemap.xml",
       '<?xml version="1.0" encoding="UTF-8"?>\n'

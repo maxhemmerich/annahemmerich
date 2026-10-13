@@ -29,6 +29,11 @@
      captions    one wrapped line of small text directly under each image,
                  in the portfolio document's own format.
      nav         plain text, sitting in a line. Never a bar.
+     years       NOT from the set — nothing in the seven has a year control.
+                 Ours, at Anna's direction: one vertical stream per year, the
+                 other years as plain links to its left and right, the year you
+                 are in named quietly in the centre. Plain text, same small
+                 size as the nav, no buttons and no arrows.
 
    The portfolio PDF is already written in this language — white page, black
    12pt Helvetica captions, a plain List of Works — so nothing here fights it.
@@ -147,6 +152,19 @@ hr{ border:0; margin:0 }
    own answer, not an invention: hughfrost's front is exactly this, one work,
    centred, caption beneath, name top-left, nav top-right.
    ========================================================================== */
+/* The stream's year control: the other years sit to the left and right of the
+   year you are in. Plain small text in one row, the same size as the section
+   nav — no buttons, no bar, no arrows. */
+.yearbar{
+  display:grid; grid-template-columns:1fr auto 1fr; align-items:baseline;
+  gap:6px 20px; margin:0;
+  padding:clamp(14px,2vw,26px) var(--pad) 0;   /* inside the page inset, like the name */
+  font-size:var(--fs-small); color:var(--ink-2);
+}
+.yearbar .cur{ grid-column:2; justify-self:center; color:var(--ink-3) }
+.yearbar a:first-child{ grid-column:1; justify-self:start }
+.yearbar a:last-child{ grid-column:3; justify-self:end }
+
 .index{
   display:flex; flex-direction:column; align-items:center;
   gap:clamp(56px, 11vh, 150px);
@@ -234,6 +252,7 @@ hr{ border:0; margin:0 }
 @media (pointer:coarse), (max-width:699px){
   .top__nav{ gap:0 18px }
   .top__nav a{ padding:9px 0 }
+  .yearbar a{ padding:9px 0 }
   .sheet__nav a{ padding:9px 0 }
   .sheet__foot a{ padding:9px 0 }
 }
