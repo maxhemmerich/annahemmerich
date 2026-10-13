@@ -22,7 +22,10 @@
      chrome      none. No bars, cards, boxes, borders, shadows, radii, icons.
                  Two glyphs appear across the whole set: an up arrow and a
                  return mark.
-     images      flush to the page edge, tight gutters, masonry columns.
+     images      one work to a screen, centred, at ~31% of the frame at 1440 —
+                the sheet rhythm five of the seven use on their fronts. The
+                frame measures 77% white here; the seven run 72/75/76/95/98/99%
+                with one at 29%.
      captions    one wrapped line of small text directly under each image,
                  in the portfolio document's own format.
      nav         plain text, sitting in a line. Never a bar.
@@ -58,8 +61,20 @@
                                            set smaller than the page's own
                                            small size in any of the seven    */
 
-  --pad: clamp(10px, 1.05vw, 17px);  /* the page's one inset   */
-  --gap: clamp(7px, .85vw, 13px);    /* the grid gutter        */
+  /* The page's one inset. The set's own spread, measured off their 1440
+     captures by _build/ref_insets.py: 3 (erlendpederkvam), 10
+     (cameronplatter), 15 (zartnan), 22 (flatfix), 30 (hughfrost), 53
+     (tareklakhrissi), 70px (ailsaogden). The build sat at 15px — the tight
+     end of the set — and read as cramped against the two generous references.
+     It now runs to ailsaogden's 70px on a wide screen and stays tight on a
+     phone, where every reference is tight. */
+  --pad: clamp(14px, 4.8vw, 70px);
+  /* The grid gutter: the set's range is 4-15px; this is its top end. */
+  --gap: clamp(8px, 1.05vw, 15px);
+  /* Not from the set: the air under the header and between a work's picture
+     and its own caption. Kept modest — the set's captions sit tight. */
+  --pad-top-block: clamp(20px, 3vw, 44px);
+  --cap-lift: 5px;
 }
 
 *,*::before,*::after{ box-sizing:border-box }
@@ -120,31 +135,33 @@ hr{ border:0; margin:0 }
 .top__nav a:hover{ color:var(--live) }
 
 /* ==========================================================================
-   The index. Full-bleed tight columns, as the set does it. No card, no frame,
-   no padding, no border, no shadow — the picture and its line of text.
+   The index, in the set's SHEET rhythm: one work to a screen, centred, its
+   single line of text beneath, the name and nav at the page edges.
+
+   Measured off the seven references' own 1440 captures (_build/refs/shots), a
+   1440x1000 frame is 72% white on hughfrost, 75-85% on ailsaogden, 98-99% on
+   erlendpederkvam, zartnan and tareklakhrissi, and 19-29% on Cameron Platter
+   alone. Five of the seven give a single work roughly 30-39% of the frame
+   width with everything else white. The old 4-across wall here measured 31%
+   white — denser than every reference in the set but one. This is the set's
+   own answer, not an invention: hughfrost's front is exactly this, one work,
+   centred, caption beneath, name top-left, nav top-right.
    ========================================================================== */
 .index{
-  columns:2;
-  column-gap:var(--gap);
-  padding:clamp(12px,1.8vw,26px) var(--pad) var(--gap);
+  display:flex; flex-direction:column; align-items:center;
+  gap:clamp(56px, 11vh, 150px);
+  padding:var(--pad-top-block) var(--pad) clamp(56px, 11vh, 150px);
 }
-@media (min-width:700px){ .index{ columns:3 } }
-@media (min-width:1080px){ .index{ columns:4 } }
-@media (min-width:1780px){ .index{ columns:5 } }
 
 .index figure{
-  margin:0 0 var(--gap);
-  display:inline-block;       /* stops a work splitting across a column */
-  width:100%;
-  break-inside:avoid;
-  -webkit-column-break-inside:avoid;
-  page-break-inside:avoid;
-  vertical-align:top;
+  margin:0;
+  width:clamp(260px, 31vw, 490px);   /* hughfrost's own picture is 31% of 1440 */
+  text-align:center;
 }
 .index img{ width:100% }
 .index figcaption{
-  font-size:var(--fs-cap); line-height:1.34; color:var(--ink-2);
-  padding-top:3px; word-break:break-word;
+  font-size:var(--fs-cap); line-height:1.5; color:var(--ink-2);
+  padding-top:var(--cap-lift); word-break:break-word;
 }
 .index figcaption b{ color:var(--ink) }
 .index figure:hover figcaption,

@@ -36,12 +36,21 @@ follows it rather than inventing anything:
 - **no interface chrome at all.** No bars, cards, boxes, borders, shadows or
   radii. Across all seven references the only glyphs that appear are an up
   arrow and a return mark.
-- **photographs tight to the page edge** — a 15px inset at 1440
-  (`clamp(10px, 1.05vw, 17px)`), the same as zartnan's, in tight masonry
-  columns. The seven's own inset, measured off their screenshots at 1440 by
-  `_build/ref_insets.py`, runs 3 (erlendpederkvam), 10 (cameronplatter), 15
-  (zartnan), 22 (flatfix), 30 (hughfrost), 53 (tareklakhrissi), 70px
-  (ailsaogden) — a wide spread, and ours sits at the tight end of it.
+- **one work to a screen, centred**, in the rhythm five of the seven use on
+  their fronts (hughfrost, ailsaogden, tareklakhrissi; zartnan's landing frame
+  is type only). Measured off their own 1440 captures, a 1440×1000 frame is
+  72% white on hughfrost, 75–85% on ailsaogden, 76% on tareklakhrissi, 95–99%
+  on flatfix / erlendpederkvam / zartnan, and 29% on Cameron Platter alone.
+  The work here is 446px — 31% of 1440, hughfrost's own figure — with 110px of
+  white between works, and the frame measures **77% white**. The earlier
+  4-across wall measured 15%, denser than every reference in the set.
+- **the page inset** now runs to the generous end of the set's own spread:
+  `clamp(14px, 4.8vw, 70px)` — ailsaogden's 70px at 1440, tight on a phone, as
+  all seven are. The seven's measured insets are 3 (erlendpederkvam), 10
+  (cameronplatter), 15 (zartnan), 22 (flatfix), 30 (hughfrost), 53
+  (tareklakhrissi), 70px (ailsaogden); `_build/ref_insets.py` re-measures them
+  off their screenshots. The grid gutter, where it still applies, is 15px —
+  the top of their 4–15px range.
 - **a text-only nav**, sitting in a line under the name: Work, CV, About. The
   text index of works (hughfrost's projects, flatfix's Ephemera) was built and
   then dropped at Anna's request — the index already carries all twenty works
@@ -54,13 +63,13 @@ follows it rather than inventing anything:
 - **the accent** is the one three of the seven declare: Cargo's
   `--baseColor-accent`, `#FF0000`, set by hughfrost, zartnan and ailsaogden.
   It replaces the type colour on hover and nothing else; no surface is tinted.
-- **the page set** is theirs as well — a works grid (flatfix's All-Paintings,
-  Cameron Platter's Drawing, erlendpederkvam's drawings, tareklakhrissi's
-  Works, Nan Zhang's selected works), one work to a page, and an
-  about/information page. `_build/ref_structure.js` records both that and the
-  columns: their work grids run 4, 5, 7 and 8 across at 1440 and 1–4 at 390.
-  This site is 4 at 1440 and 2 at 390 — tareklakhrissi's figure, the low end
-  of theirs.
+- **the page set** is theirs as well — a works page, one work to a page, and an
+  about/information page. The front used to be a masonry grid running 4 across
+  at 1440 and 2 at 390 (tareklakhrissi's figure, the low end of the set's 4–8);
+  it is now the sheet rhythm instead, because measured against the set's own
+  frames it read as the densest thing in the room — 15% white where five of
+  the seven sit at 72–99%. `_build/ref_structure.js` records the set's page
+  types and columns.
 
 The page ground is pure white, as all seven references declare. An earlier
 build used `#f4f3f0` on the theory that Anna's photographs — taken against a
