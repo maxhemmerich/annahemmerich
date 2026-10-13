@@ -107,11 +107,16 @@ hr{ border:0; margin:0 }
 .skip:focus{ left:0; top:0 }
 
 /* ==========================================================================
-   The top block. A name, a line about the work, a line of links. All type —
-   no bar, no rule, no background. Built from the set's two clearest headers:
-   Cameron Platter's run-on text block and Nan Zhang's one-line row.
+   The top block. A name on the left, the section links on the right — the
+   reference set's own arrangement (hughfrost: name top-left, nav top-right).
+   It used to stack name over links at the left, which left a line of type
+   sitting directly under the name and no air across the top of the page.
    ========================================================================== */
-.top{ padding:var(--pad) var(--pad) 0 }
+.top{
+  padding:var(--pad) var(--pad) 0;
+  display:flex; align-items:baseline; justify-content:space-between;
+  gap:6px 24px; flex-wrap:wrap;
+}
 .top__inner{
   display:flex; align-items:baseline; justify-content:space-between;
   gap:6px 20px; flex-wrap:wrap;
@@ -180,6 +185,27 @@ hr{ border:0; margin:0 }
 .index figcaption{
   font-size:var(--fs-cap); line-height:1.5; color:var(--ink-2);
   padding-top:var(--cap-lift); word-break:break-word;
+}
+
+/* ==========================================================================
+   The stream pages scroll IN PLACE: the name, the section links and the year
+   row stay where they are while the paintings move inside their own window.
+   Anna's direction — and named as ours: nothing in the seven references does
+   this, they all scroll the whole document. Plain CSS, no script: the body is
+   one viewport tall and .index is the scroller.
+   ========================================================================== */
+body.stream{ display:flex; flex-direction:column; height:100svh; overflow:hidden }
+body.stream #main{ flex:1 1 auto; min-height:0; display:flex; flex-direction:column }
+body.stream .index{
+  flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain;
+  scroll-snap-type:y proximity;
+}
+body.stream .index figure{ scroll-snap-align:center }
+body.stream .backtop{ text-align:center }
+@media (max-width:699px){
+  /* the whole frame is small on a phone, so give the scroller its own margin
+     and keep the work centred in what is left */
+  body.stream .index{ gap:clamp(40px, 8vh, 90px) }
 }
 .index figcaption b{ color:var(--ink) }
 .index figure:hover figcaption,

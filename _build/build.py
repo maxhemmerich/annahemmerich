@@ -91,7 +91,8 @@ def nav(prefix, current, cls="top__nav", links=None):
             f'{navlinks(prefix, current, links)}</nav>')
 
 
-def head(title, desc, path, prefix, extra=""):
+def head(title, desc, path, prefix, extra="", body_class=""):
+    bc = f' class="{body_class}"' if body_class else ""
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -116,7 +117,7 @@ def head(title, desc, path, prefix, extra=""):
 <link rel="icon" href="{R(prefix, 'favicon.svg')}" type="image/svg+xml">
 <link rel="stylesheet" href="{R(prefix, 'assets/css/site.css')}">
 {extra}</head>
-<body>
+<body{bc}>
 <a class="skip" href="#main">Skip to content</a>
 """
 
@@ -219,7 +220,7 @@ def build_home(prefix="", year=None):
         desc = ("Paintings by Anna Hemmerich \u2014 acrylic, oil and collage on canvas, "
                 "panel and cut wood. Twenty works, 2025\u20132026.")
     return (head(title, desc, f"/{'' if year is None else str(year) + '/'}", prefix,
-                 f'<script type="application/ld+json">{ld}</script>\n')
+                 f'<script type="application/ld+json">{ld}</script>\n', body_class="stream")
             + top(prefix, "", as_h1=True) + body + tail(prefix))
 
 
