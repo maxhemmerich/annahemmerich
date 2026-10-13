@@ -4,8 +4,9 @@ Anna Hemmerich's painting portfolio. A static site, no build step at deploy
 time — GitHub Pages serves the repository root directly.
 
     index.html            the stream of all twenty works
-    2026/  2025/          the same stream, one page per year, the other
-                          years as plain links to its left and right
+    2026/  2025/          the same stream, one page per year, the years as
+                          rails beside the painting window: older left, newer
+                          right, centred against the scroll, All outside each
     work/<slug>/          one page per work
     cv/                   education and selected exhibitions
     about/                Anna in her own words, and contact
