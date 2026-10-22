@@ -101,13 +101,10 @@ a:hover{ color:inherit }
 /* ==========================================================================
    Work: the grid — 4 across, centred, scrolls the window.
    ========================================================================== */
-body.work{
-  height:100svh; overflow:hidden;
-  display:grid;
-  grid-template-rows:auto minmax(0,1fr) auto;
-}
-body.work #main{ overflow-y:auto; min-height:0; }
-.work{ padding:clamp(10px,2vw,28px) var(--pad) clamp(40px,7vw,90px) }
+body.work{ height:100svh; overflow:hidden; }
+body.work #main{ overflow-y:auto; min-height:0; scrollbar-width:none; }
+body.work #main::-webkit-scrollbar{ width:0; height:0; display:none; }
+main.work{ padding:clamp(10px,2vw,28px) var(--pad) clamp(40px,7vw,90px) }
 .grid{
   display:grid; grid-template-columns:repeat(4, var(--thumb));
   justify-content:center; gap:var(--gap);
@@ -149,7 +146,9 @@ body.work #main{ overflow-y:auto; min-height:0; }
   padding:14px;
 }
 .overlay__x{ position:absolute; top:6px; right:6px }
-.overlay__prev, .overlay__next{ position:static; padding:10px }
+.overlay__prev, .overlay__next{ position:absolute; top:50%; transform:translateY(-50%); padding:10px }
+.overlay__prev{ left:calc(2 * var(--thumb)) }
+.overlay__next{ right:calc(2 * var(--thumb)) }
 .overlay__x:hover, .overlay__prev:hover, .overlay__next:hover{ color:var(--ink) }
 
 /* ==========================================================================
