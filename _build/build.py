@@ -259,7 +259,7 @@ def build_cv(prefix="../"):
 """
     return (head(f"CV — {S['name']}",
                  f"Education and selected exhibitions — {S['name']}.",
-                 "/cv/", prefix) + top(prefix, "cv/") + body + tail(prefix))
+                 "/cv/", prefix, body_class="cv") + top(prefix, "cv/") + body + tail(prefix))
 
 
 # ----------------------------------------------------------------- 404 ---
