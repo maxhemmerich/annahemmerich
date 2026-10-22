@@ -144,7 +144,8 @@ def build_home(prefix=""):
   <p class="landing__cap">{caption_html(w)}</p>
 </main>
 """
-    return (head(f"{S['name']} — Painting", "Paintings by Anna Hemmerich.", "/", prefix)
+    return (head(f"{S['name']} — Painting", "Paintings by Anna Hemmerich.", "/", prefix,
+                 body_class="home")
             + top(prefix, "", as_h1=True) + body + tail(prefix))
 
 

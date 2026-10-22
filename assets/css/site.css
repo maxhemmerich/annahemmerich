@@ -80,18 +80,23 @@ a:hover{ color:inherit }
 .top__nav a{ padding:2px 0 }
 
 /* ==========================================================================
-   Landing: one painting, static, height less than the screen.
+   Landing: one painting, static, fits the screen on desktop, as tall as
+   possible.
    ========================================================================== */
+@media (min-width:900px){ body.home{ height:100svh; overflow:hidden; } }
 .landing{
-  flex:1 1 auto; display:flex; flex-direction:column;
+  flex:1 1 auto; min-height:0; display:flex; flex-direction:column;
   align-items:center; justify-content:center;
-  padding:clamp(8px,2vw,24px) var(--pad) clamp(16px,3vw,32px);
+  padding:0 var(--pad) clamp(8px,1.5vw,16px);
   gap:clamp(8px,1.2vw,16px);
 }
-.landing__img{ display:flex; justify-content:center; width:100% }
+.landing__img{
+  flex:1 1 auto; min-height:0; display:flex;
+  align-items:center; justify-content:center; width:100%;
+}
 .landing__img img{
-  max-height:max(200px, calc(100svh - 240px));
-  width:auto; max-width:100%; object-fit:contain;
+  max-height:100%; max-width:100%;
+  width:auto; object-fit:contain;
 }
 .landing__cap{ font-size:var(--fs-small); color:var(--ink-2); margin:0 }
 .landing__cap b{ font-weight:400; color:var(--ink); font-style:italic }
