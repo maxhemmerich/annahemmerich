@@ -101,8 +101,12 @@ a:hover{ color:inherit }
 /* ==========================================================================
    Work: the grid — 4 across, centred, scrolls the window.
    ========================================================================== */
-body.work{ height:100svh; overflow:hidden; }
-body.work #main{ overflow-y:auto; }
+body.work{
+  height:100svh; overflow:hidden;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto;
+}
+body.work #main{ overflow-y:auto; min-height:0; }
 .work{ padding:clamp(10px,2vw,28px) var(--pad) clamp(40px,7vw,90px) }
 .grid{
   display:grid; grid-template-columns:repeat(4, var(--thumb));
