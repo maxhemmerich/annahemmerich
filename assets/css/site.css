@@ -87,11 +87,11 @@ a:hover{ color:inherit }
 .landing{
   min-height:0; display:grid;
   grid-template-rows:minmax(0,1fr) auto;
-  align-items:center; justify-items:center;
+  justify-items:center;
   padding:0 var(--pad) clamp(8px,1.5vw,16px);
   gap:clamp(8px,1.2vw,16px);
 }
-.landing__img{ min-height:0; display:flex; align-items:center; justify-content:center; width:100% }
+.landing__img{ min-height:0; align-self:stretch; display:flex; align-items:center; justify-content:center; width:100% }
 .landing__img img{
   max-height:100%; max-width:100%; width:auto; object-fit:contain;
 }
