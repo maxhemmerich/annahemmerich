@@ -218,7 +218,8 @@ def build_work(prefix=""):
 }})();
 </script>
 """
-    return (head(f"{S['name']} — Work", "All paintings by Anna Hemmerich.", "/work/", prefix)
+    return (head(f"{S['name']} — Work", "All paintings by Anna Hemmerich.", "/work/", prefix,
+                 body_class="work")
             + top(prefix, "work/") + body + tail(prefix))
 
 
@@ -243,7 +244,6 @@ def build_cv(prefix="../"):
         contact += (f' \u00b7 <a href="https://www.instagram.com/{esc(ig)}/">'
                     f'@{esc(ig)}</a>')
     body = f"""<main id="main" class="page">
-  <h1>CV</h1>
   <p class="sub">{esc(S['name'])} \u2014 {contact}</p>
 
   <h2>Education</h2>
