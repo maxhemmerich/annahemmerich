@@ -288,7 +288,7 @@ def write(path, content):
 
 n = 0
 write("index.html", build_home("")); n += 1
-write("work/index.html", build_work("")); n += 1
+write("work/index.html", build_work("../")); n += 1
 write("cv/index.html", build_cv("../")); n += 1
 write("404.html", build_404()); n += 1
 
