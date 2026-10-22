@@ -1,21 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Build annahemmerich.com — a static site, GitHub Pages ready.
+"""Build annahemmerich.com — landing (one painting), work (grid + overlay), cv.
 
     python _build/build.py
 
-Design source: the seven reference sites Anna sent (all Cargo), read for their
-shared house style — white ground, one small neutral grotesque, no interface
-chrome, photographs bleeding to the page edge, a text-only nav, captions run on
-as one line. The caption shape is the set's own (hughfrost's); the dimensions
-inside it are Anna's, in inches, height x width, as in her portfolio PDF.
-
-URLs are RELATIVE, computed from each page's depth. A GitHub Pages project site
-is served from a subpath (/annahemmerich/...), and a root-absolute href like
-/assets/css/site.css then points outside the site. That failure is silent in a
-local preview served from / — it cost a live deploy with no stylesheet.
-Absolute URLs are used only in <link rel="canonical">, og:url, the sitemap and
-robots.txt, where they are meant to name the real domain.
+Max's redesign (2026-10-22):
+  * landing  = ONE painting, static, height < screen
+  * work     = a GRID of all paintings (4 across, thumbnails), scrollable;
+               click one -> the grid disappears and the picture opens big, with
+               an X to close and left/right arrows to move through them
+  * nav      = "anna hemmerich" top-left, "work" below it, "cv" below that,
+               left aligned. No About.
+  * no red / no underline on hover
+  * footer   = copyright only — "All works remain the property of the artist"
+               and "Back to top" are gone
 
 Content source of truth: _build/works.json
 """
@@ -29,22 +27,9 @@ S = DATA["site"]
 WORKS = DATA["works"]
 DOMAIN = S["domain"]
 BASE = f"https://{DOMAIN}"
-# Where the site is served from right now. '/annahemmerich' on the Pages
-# project URL, '' once the custom domain is live. Only the 404 page needs it,
-# because a 404 can be hit at any depth, so relative links are not safe there.
 PROJECT_BASE = S.get("base", "")
 NOW = datetime.date.today().isoformat()
 YEAR = datetime.date.today().year
-
-# ---------------------------------------------------------------- content ---
-# The About page is Anna speaking, in her own words — nothing written about her
-# in a third person. The facts the page does not say in prose (media) are in the
-# tags list; the biography itself, one paragraph or a list of them, comes from
-# works.json so the copy is hers to edit.
-_bio = S.get("bio", "")
-BIO = [p.strip() for p in ([_bio] if isinstance(_bio, str) else _bio) if p.strip()]
-EMAIL = S.get("email", "").strip()
-MEDIA = ["Acrylic", "Oil", "Collage", "Cut wood", "Canvas", "Panel", "Board"]
 
 
 def esc(s):
@@ -52,36 +37,19 @@ def esc(s):
 
 
 def cap(w):
-    """The set's own caption line: run on as one line, only the year set off
-    by a comma. hughfrost does it exactly this way — "Skynet (Next Day
-    5p.p.m.) Acrylic on panel & plywood 30 x 45cm, 2025"; ailsaogden runs
-    title, medium and year together with no punctuation at all."""
     return f"{w['title']} {w['medium']} {w['dims']}, {w['year']}"
 
 
 def caption_html(w):
-    """The same line, with the title held back in the ink colour."""
     return (f'<b>{esc(w["title"])}</b> {esc(w["medium"])} '
             f'{esc(w["dims"])}, {w["year"]}')
 
 
 def R(prefix, path):
-    """A URL to a site-root-relative path, relative to a page at `prefix`."""
     return prefix + path.lstrip("/")
 
 
 def css_href(prefix):
-    """The stylesheet's URL, versioned by the stylesheet's own bytes.
-
-    GitHub Pages serves every asset with a ten-minute cache and headers we
-    cannot set, so without this a visitor can be reading new HTML while still
-    holding an old stylesheet — which is exactly how a shipped change looked
-    like it had not shipped. The query is the first 8 hex of the file's sha256,
-    so any edit to the stylesheet publishes a URL no browser has cached.
-
-    The version is read at BUILD time: edit site.css and you must rebuild
-    (which is the site's rule anyway — the CSS lives beside the generator).
-    """
     try:
         with open(os.path.join(ROOT, "assets", "css", "site.css"), "rb") as f:
             v = hashlib.sha256(f.read()).hexdigest()[:8]
@@ -90,25 +58,34 @@ def css_href(prefix):
     return R(prefix, "assets/css/site.css") + (f"?v={v}" if v else "")
 
 
-# ------------------------------------------------------------------ shell ---
-# The nav Anna asked for: three sections. "List of works" was removed — the
-# index already carries every work as a photograph with its full caption, so
-# the text list was a second copy of the same set.
-NAV = [("Work", ""), ("CV", "cv/"), ("About", "about/")]
+# ---------------------------------------------------------------- nav ---
+# Two sections: Work and CV. About is gone (Max, 2026-10-22).
+NAV = [("work", "work/"), ("cv", "cv/")]
 
 
-def navlinks(prefix, current, links=None):
+def navlinks(prefix, current):
     out = []
-    for label, href in (links or NAV):
+    for label, href in NAV:
         cur = ' aria-current="page"' if (href == current and "#" not in href) else ""
         target = R(prefix, href) if href else (prefix or "./")
         out.append(f'<a href="{target}"{cur}>{esc(label)}</a>')
     return "".join(out)
 
 
-def nav(prefix, current, cls="top__nav", links=None):
-    return (f'<nav class="{cls}" aria-label="Sections">'
-            f'{navlinks(prefix, current, links)}</nav>')
+def top(prefix, current, as_h1=False):
+    """The name top-left, then the two links stacked under it, left aligned."""
+    name = f'<a href="{prefix or "./"}">{esc(S["name"])}</a>'
+    tag = "h1" if as_h1 else "p"
+    return f"""<header class="top" id="top">
+  <{tag} class="name">{name}</{tag}>
+  <nav class="top__nav" aria-label="Sections">{navlinks(prefix, current)}</nav>
+</header>
+"""
+
+
+def tail(prefix):
+    """Copyright only — the property line and Back to top are gone."""
+    return f'<footer class="tail"><span>&copy; {YEAR} {esc(S["name"])}</span></footer>\n'
 
 
 def head(title, desc, path, prefix, extra="", body_class=""):
@@ -142,33 +119,7 @@ def head(title, desc, path, prefix, extra="", body_class=""):
 """
 
 
-def top(prefix, current, as_h1=False):
-    """The one header. The name, then a line of links.
-
-    Nothing describes the work up here. Anna's own words: the line that used to
-    sit under the name ("Painting - acrylic, oil, ... twenty works, 2025-2026")
-    was ours, not hers, and the work itself says it."""
-    name = f'<a href="{prefix or "./"}">{esc(S["name"])}</a>'
-    tag = "h1" if as_h1 else "p"
-    return f"""<header class="top" id="top">
-  <{tag} class="name">{name}</{tag}>
-  {nav(prefix, current)}
-</header>
-"""
-
-
-def tail(prefix):
-    """The footer: the copyright and the property line. The address was removed
-    at Anna's request — the About and CV pages still carry the contact."""
-    return f"""<footer class="tail">
-  <span>&copy; {YEAR} {esc(S['name'])}</span>
-  <span>All works remain the property of the artist</span>
-</footer>
-"""
-
-
 def picture(w, prefix, sizes, loading="lazy"):
-    """webp + jpeg, intrinsic size, no layout shift."""
     w_attr, h_attr = (w.get("px1600") or [1600, 1200])
     art = R(prefix, "assets/art/")
     return (
@@ -182,148 +133,96 @@ def picture(w, prefix, sizes, loading="lazy"):
         f'</picture>')
 
 
-# ------------------------------------------------------------------- home ---
-# The stream's year control. Anna's layout: the years flank the painting
-# window — older to the left, newer to the right, each centred against the
-# scroll. The year you are already in keeps NO button (it is the page you are
-# on), and "All" appears exactly once: to the right of the 2026 slot when 2026
-# is the one showing, to the left of the 2025 slot when 2025 is. On the
-# all-works page both years are links and All keeps no button either, since
-# that page is All. Plain small text, no buttons that look like buttons, no
-# arrows. Nothing in the seven references has a year control at all: ours.
-def year_rails(prefix, year=None):
-    years = sorted({int(w["year"]) for w in WORKS})          # oldest first
-    mid = max(1, (len(years) + 1) // 2)
-    left_years, right_years = years[:mid], years[mid:]
-
-    def ylink(y):
-        if year == y:
-            return ""                       # the year showing keeps no button
-        return f'<a href="{R(prefix, f"{y}/")}">{y}</a>'
-
-    allitem = "" if year is None else f'<a href="{prefix or "./"}">All</a>'
-    all_left = (year is not None and year == min(years))     # 2025 showing: All left of it
-    left = (allitem if all_left else "") + "".join(ylink(y) for y in left_years)
-    right = "".join(ylink(y) for y in right_years) + ("" if all_left else allitem)
-    return (f'<nav class="rail rail--left" aria-label="Years">\n'
-            f'    {left}\n  </nav>\n',
-            f'\n  <nav class="rail rail--right" aria-label="Years">\n'
-            f'    {right}\n  </nav>\n')
-
-
-def build_home(prefix="", year=None):
-    works = [w for w in WORKS if year is None or int(w["year"]) == year]
-    rail_left, rail_right = year_rails(prefix, year)
-    figs = []
-    for w in works:
-        href = R(prefix, f"work/{w['slug']}/")
-        figs.append(
-            f'    <figure>\n'
-            f'      <a href="{href}">{picture(w, prefix, "(max-width:699px) 48vw, (max-width:1079px) 32vw, (max-width:1779px) 24vw, 19vw")}</a>\n'
-            f'      <figcaption><a href="{href}">{caption_html(w)}</a></figcaption>\n'
-            f'    </figure>')
-
-    ld = json.dumps({
-        "@context": "https://schema.org",
-        "@type": "CollectionPage",
-        "name": (f"{S['name']} \u2014 {year}" if year else f"{S['name']} \u2014 Work"),
-        "url": f"{BASE}/{'' if year is None else str(year) + '/'}",
-        "about": {"@type": "Person", "name": S["name"], "jobTitle": "Painter"},
-        "hasPart": [{
-            "@type": "VisualArtwork", "name": w["title"], "artMedium": w["medium"],
-            "dateCreated": str(w["year"]), "url": f"{BASE}/work/{w['slug']}/",
-            "image": f"{BASE}/assets/art/{w['slug']}-1600.jpg",
-        } for w in works],
-    }, ensure_ascii=False)
-
-    body = f"""<main id="main">
-  <div class="streamwrap">
-  {rail_left}  <div class="index">
-{chr(10).join(figs)}
-  </div>{rail_right}</div>
-  <p class="backtop"><a href="#top">Back to top &#8593;</a></p>
+# ------------------------------------------------------------- landing ---
+def build_home(prefix=""):
+    """One painting, static, height less than the screen."""
+    w = WORKS[0]  # the landing painting is the first work
+    body = f"""<main id="main" class="landing">
+  <div class="landing__img">
+    {picture(w, prefix, "100vw", loading="eager")}
+  </div>
+  <p class="landing__cap">{caption_html(w)}</p>
 </main>
 """
-    if year:
-        title = f"{S['name']} \u2014 {year}"
-        desc = (f"Paintings by Anna Hemmerich \u2014 {len(works)} works from {year}. "
-                "Acrylic, oil and collage on canvas, panel and cut wood.")
-    else:
-        title = f"{S['name']} \u2014 Painting"
-        desc = ("Paintings by Anna Hemmerich \u2014 acrylic, oil and collage on canvas, "
-                "panel and cut wood. Twenty works, 2025\u20132026.")
-    return (head(title, desc, f"/{'' if year is None else str(year) + '/'}", prefix,
-                 f'<script type="application/ld+json">{ld}</script>\n', body_class="stream")
+    return (head(f"{S['name']} — Painting", "Paintings by Anna Hemmerich.", "/", prefix)
             + top(prefix, "", as_h1=True) + body + tail(prefix))
 
 
-# ------------------------------------------------------------- work pages ---
-def build_work(idx, prefix="../../"):
-    w = WORKS[idx]
-    prev = WORKS[idx - 1] if idx > 0 else WORKS[-1]
-    nxt = WORKS[(idx + 1) % len(WORKS)]
+# ---------------------------------------------------------------- work ---
+def build_work(prefix=""):
+    """The grid of all works, and the overlay that opens a picture big."""
+    tiles = []
+    for i, w in enumerate(WORKS):
+        tiles.append(
+            f'    <button class="tile" type="button" data-i="{i}" '
+            f'aria-label="{esc(cap(w))}">{picture(w, prefix, "300px")}</button>')
 
-    ld = json.dumps({
-        "@context": "https://schema.org",
-        "@type": "VisualArtwork",
-        "name": w["title"],
-        "creator": {"@type": "Person", "name": S["name"]},
-        "artMedium": w["medium"],
-        "artform": "Painting",
-        "dateCreated": str(w["year"]),
-        "image": f"{BASE}/assets/art/{w['slug']}-1600.jpg",
-        "url": f"{BASE}/work/{w['slug']}/",
-        "isPartOf": {"@type": "CollectionPage", "name": f"{S['name']} \u2014 Work", "url": f"{BASE}/"},
-    }, ensure_ascii=False)
+    works_js = json.dumps([{
+        "src": R(prefix, f"assets/art/{w['slug']}-1600.jpg"),
+        "webp": R(prefix, f"assets/art/{w['slug']}-1600.webp"),
+        "cap": cap(w),
+    } for w in WORKS], ensure_ascii=False)
 
-    links = [("Work", ""), ("CV", "cv/"), ("About", "about/")]
-    body = f"""<main id="main" class="sheet">
-  <div class="sheet__head">
-    <p class="name"><a href="{prefix or "./"}">{esc(S['name'])}</a></p>
-    <nav class="sheet__nav" aria-label="Sections">{navlinks(prefix, "", links)}</nav>
-  </div>
-
-  <div class="sheet__body">
-    <a href="{R(prefix, f"assets/art/{w['slug']}-1600.jpg")}">{picture(w, prefix, '(max-width:1100px) 92vw, 78vw', loading='eager')}</a>
-    <h1 class="sheet__cap">{caption_html(w)}</h1>
-  </div>
-
-  <div class="sheet__foot">
-    <a href="{R(prefix, f"work/{prev['slug']}/")}">&#8592; {esc(prev['title'])}</a>
-    <span>{w['n']} of {len(WORKS)}</span>
-    <a href="{R(prefix, f"work/{nxt['slug']}/")}">{esc(nxt['title'])} &#8594;</a>
+    body = f"""<main id="main" class="work">
+  <div class="grid" id="grid">
+{chr(10).join(tiles)}
   </div>
 </main>
+
+<div class="overlay" id="overlay" hidden>
+  <button class="overlay__x" type="button" aria-label="Close">×</button>
+  <button class="overlay__prev" type="button" aria-label="Previous">←</button>
+  <figure class="overlay__fig">
+    <picture>
+      <source id="ov-src" type="image/webp">
+      <img id="ov-img" src="" alt="">
+    </picture>
+    <figcaption id="ov-cap"></figcaption>
+  </figure>
+  <button class="overlay__next" type="button" aria-label="Next">→</button>
+</div>
+
+<script>
+(() => {{
+  const W = {works_js};
+  const ov = document.getElementById("overlay");
+  const img = document.getElementById("ov-img");
+  const src = document.getElementById("ov-src");
+  const cap = document.getElementById("ov-cap");
+  let cur = -1;
+  function show(i) {{
+    cur = (i + W.length) % W.length;
+    img.src = W[cur].src;
+    src.srcset = W[cur].webp;
+    img.alt = W[cur].cap;
+    cap.textContent = W[cur].cap;
+    ov.hidden = false;
+    document.body.classList.add("locked");
+  }}
+  function hide() {{
+    ov.hidden = true;
+    document.body.classList.remove("locked");
+  }}
+  document.querySelectorAll(".tile").forEach((b, i) =>
+    b.addEventListener("click", () => show(i)));
+  document.querySelector(".overlay__x").addEventListener("click", hide);
+  document.querySelector(".overlay__prev").addEventListener("click", () => show(cur - 1));
+  document.querySelector(".overlay__next").addEventListener("click", () => show(cur + 1));
+  document.addEventListener("keydown", (e) => {{
+    if (ov.hidden) return;
+    if (e.key === "Escape") hide();
+    else if (e.key === "ArrowLeft") show(cur - 1);
+    else if (e.key === "ArrowRight") show(cur + 1);
+  }});
+}})();
+</script>
 """
-    return (head(f"{w['title']} \u2014 {S['name']}", f"{cap(w)}. Painting by Anna Hemmerich.",
-                 f"/work/{w['slug']}/", prefix,
-                 f'<script type="application/ld+json">{ld}</script>\n')
-            + body + tail(prefix))
+    return (head(f"{S['name']} — Work", "All paintings by Anna Hemmerich.", "/work/", prefix)
+            + top(prefix, "work/") + body + tail(prefix))
 
 
-# ---------------------------------------------------------------- about ---
-def build_about(prefix="../"):
-    bio = "".join(f'  <p>{esc(p)}</p>\n' for p in BIO)
-    body = f"""<main id="main" class="page">
-  <h1>About</h1>
-{bio}  <ul class="tags">
-{chr(10).join(f'    <li>{esc(m)}</li>' for m in MEDIA)}
-  </ul>
-
-  <h2>Contact</h2>
-  <p>For enquiries about the work, exhibitions, or the full list of works with
-  prices: <a href="mailto:{esc(EMAIL)}">{esc(EMAIL)}</a></p>
-</main>
-"""
-    return (head(f"About \u2014 {S['name']}",
-                 f"{S['name']} \u2014 a Canadian painter and collagist in Tampa, "
-                 f"working in acrylic, oil and collage.",
-                 "/about/", prefix) + top(prefix, "about/") + body + tail(prefix))
-
-
-# ------------------------------------------------------------------- cv ---
+# ------------------------------------------------------------------ cv ---
 def build_cv(prefix="../"):
-    """Her CV, as she sent it: education, then the exhibitions she selected."""
     CV = S.get("cv", {})
 
     def rows(items, key):
@@ -338,7 +237,7 @@ def build_cv(prefix="../"):
     ig = S.get("instagram", "").strip()
     city = S.get("city", "").strip()
     contact = f'{esc(city)} \u00b7 ' if city else ""
-    contact += f'<a href="mailto:{esc(EMAIL)}">{esc(EMAIL)}</a>'
+    contact += f'<a href="mailto:{esc(S.get("email", ""))}">{esc(S.get("email", ""))}</a>'
     if ig:
         contact += (f' \u00b7 <a href="https://www.instagram.com/{esc(ig)}/">'
                     f'@{esc(ig)}</a>')
@@ -357,24 +256,19 @@ def build_cv(prefix="../"):
   </ul>
 </main>
 """
-    return (head(f"CV \u2014 {S['name']}",
-                 f"Education and selected exhibitions \u2014 {S['name']}.",
+    return (head(f"CV — {S['name']}",
+                 f"Education and selected exhibitions — {S['name']}.",
                  "/cv/", prefix) + top(prefix, "cv/") + body + tail(prefix))
 
 
-# ------------------------------------------------------------------ 404 ---
+# ----------------------------------------------------------------- 404 ---
 def build_404():
-    """A 404 can be served at any depth, so relative links are not safe here.
-    This is the one page that uses paths absolute to the project root, and
-    PROJECT_BASE is the single value that changes when the domain goes live."""
     b = PROJECT_BASE or ""
     proot = f"{PROJECT_BASE}/"
-    links = (f'<a href="{b}/">Work</a> &nbsp; '
-             f'<a href="{b}/about/">About</a>')
     body = f"""<main id="main" class="page">
   <h1>404</h1>
   <p class="sub">That page isn't here.</p>
-  <p>{links}</p>
+  <p><a href="{b}/work/">Work</a></p>
 </main>
 """
     return (head("Not found", "Page not found.", "/404.html", proot)
@@ -383,7 +277,7 @@ def build_404():
             + body + tail(proot))
 
 
-# ----------------------------------------------------------------- write ---
+# ---------------------------------------------------------------- write ---
 def write(path, content):
     full = os.path.join(ROOT, path.lstrip("/").replace("/", os.sep))
     os.makedirs(os.path.dirname(full), exist_ok=True)
@@ -394,34 +288,33 @@ def write(path, content):
 
 n = 0
 write("index.html", build_home("")); n += 1
-YEARS = sorted({int(w["year"]) for w in WORKS}, reverse=True)
-for y in YEARS:
-    # one page per year: the same vertical stream, filtered, with the other
-    # years as plain links to its left and right (Anna's call).
-    write(f"{y}/index.html", build_home("../", year=y)); n += 1
-for i in range(len(WORKS)):
-    write(f"work/{WORKS[i]['slug']}/index.html", build_work(i, "../../")); n += 1
+write("work/index.html", build_work("")); n += 1
 write("cv/index.html", build_cv("../")); n += 1
-write("about/index.html", build_about("../")); n += 1
 write("404.html", build_404()); n += 1
 
-# /list-of-works/ is gone (Anna's call: the index already lists every work with
-# its full caption). Drop the stale directory too, so a rebuild cannot leave the
-# old page answering at its own URL — unlinked is not gone on a static host.
-stale = os.path.join(ROOT, "list-of-works")
-if os.path.isdir(stale):
-    shutil.rmtree(stale)
-    print("removed stale list-of-works/")
+# The old pages are gone: about, the per-year streams, and the one-page-per-work
+# sheets (the overlay replaces them). Remove their directories so a rebuild
+# cannot leave them answering at their own URLs.
+for stale in ("about", "2025", "2026"):
+    d = os.path.join(ROOT, stale)
+    if os.path.isdir(d):
+        shutil.rmtree(d)
+        print(f"removed stale {stale}/")
+stale_work = os.path.join(ROOT, "work")
+if os.path.isdir(stale_work):
+    for child in os.listdir(stale_work):
+        p = os.path.join(stale_work, child)
+        if os.path.isdir(p):
+            shutil.rmtree(p)
+    print("removed stale work/<slug>/ pages")
 
 write(".nojekyll", "")
 write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {BASE}/sitemap.xml\n")
-urls = (["/"] + [f"/{y}/" for y in YEARS] + [f"/work/{w['slug']}/" for w in WORKS]
-        + ["/cv/", "/about/"])
+urls = ["/", "/work/", "/cv/"]
 write("sitemap.xml",
       '<?xml version="1.0" encoding="UTF-8"?>\n'
       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
       + "".join(f'  <url><loc>{BASE}{u}</loc><lastmod>{NOW}</lastmod></url>\n' for u in urls)
       + "</urlset>\n")
 
-print(f"built {n} pages + .nojekyll/robots.txt/sitemap.xml  (page URLs relative,"
-      f" 404 root = {PROJECT_BASE or '/'})")
+print(f"built {n} pages + .nojekyll/robots.txt/sitemap.xml  (404 root = {PROJECT_BASE or '/'})")
