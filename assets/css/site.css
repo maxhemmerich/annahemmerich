@@ -161,8 +161,8 @@ body.home .tail, body.work .tail, body.cv .tail{
   padding:14px;
 }
 .overlay__x{ position:absolute; top:6px; right:6px }
-.overlay__prev{ flex:1 1 0; min-width:0; align-self:stretch; display:flex; align-items:center; justify-content:flex-start; padding:10px 10px 10px clamp(24px,3vw,48px); cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24'%3E%3Cpath d='M15 5l-7 7 7 7' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 14 14, pointer }
-.overlay__next{ flex:1 1 0; min-width:0; align-self:stretch; display:flex; align-items:center; justify-content:flex-end; padding:10px clamp(24px,3vw,48px) 10px 10px; cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24'%3E%3Cpath d='M9 5l7 7-7 7' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 14 14, pointer }
+.overlay__prev{ flex:1 1 0; min-width:0; align-self:stretch; display:flex; align-items:center; justify-content:flex-start; padding:10px 10px 10px clamp(24px,3vw,48px); cursor:url("../hand/leftarrow-cursor.png") 1 14, pointer }
+.overlay__next{ flex:1 1 0; min-width:0; align-self:stretch; display:flex; align-items:center; justify-content:flex-end; padding:10px clamp(24px,3vw,48px) 10px 10px; cursor:url("../hand/rightarrow-cursor.png") 47 14, pointer }
 .overlay__x:hover, .overlay__prev:hover, .overlay__next:hover{ color:var(--ink) }
 
 /* ==========================================================================
@@ -196,7 +196,6 @@ body.cv .page{ padding-top:clamp(24px,4vw,56px); }
 
 /* ===== handwritten elements (Max, 2026-10-23): the name, nav, copyright and
    overlay arrows are images of the handwritten sketch, not text ===== */
-.name a img{ height:24px; width:auto; display:block }
+.name a img{ height:28px; width:auto; display:block }
 .top__nav a img{ height:17px; width:auto; display:block }
-.tail img{ height:12px; width:auto; display:block }
-.overlay__prev img, .overlay__next img{ height:30px; width:auto }
+.tail img{ height:18px; width:auto; display:block }

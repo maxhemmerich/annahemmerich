@@ -177,7 +177,7 @@ def build_work(prefix=""):
 
 <div class="overlay" id="overlay" hidden>
   <button class="overlay__x" type="button" aria-label="Close">×</button>
-  <button class="overlay__prev" type="button" aria-label="Previous"><img class="arr" src="{R(prefix, 'assets/hand/leftarrow.png')}" alt=""></button>
+  <button class="overlay__prev" type="button" aria-label="Previous"></button>
   <figure class="overlay__fig">
     <picture>
       <source id="ov-src" type="image/webp">
@@ -185,7 +185,7 @@ def build_work(prefix=""):
     </picture>
     <figcaption id="ov-cap"></figcaption>
   </figure>
-  <button class="overlay__next" type="button" aria-label="Next"><img class="arr" src="{R(prefix, 'assets/hand/rightarrow.png')}" alt=""></button>
+  <button class="overlay__next" type="button" aria-label="Next"></button>
 </div>
 
 <script>
