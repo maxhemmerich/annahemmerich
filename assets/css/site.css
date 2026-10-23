@@ -83,12 +83,12 @@ a:hover{ color:inherit }
    Landing: one painting, static, fits the screen on desktop, as tall as
    possible.
    ========================================================================== */
-@media (min-width:900px){ body.home{ height:100svh; overflow:hidden; display:grid; grid-template-rows:auto minmax(0,1fr) auto; grid-template-columns:100%; } }
+@media (min-width:900px){ body.home{ height:100svh; overflow:hidden; position:relative; } }
 .landing{
-  min-height:0; display:grid;
-  grid-template-rows:minmax(0,1fr) auto;
+  position:absolute; inset:0;
+  display:grid; grid-template-rows:minmax(0,1fr) auto;
   justify-items:center;
-  padding:0 var(--pad) clamp(8px,1.5vw,16px);
+  padding:0 var(--pad) clamp(48px,7vw,64px);
   gap:clamp(8px,1.2vw,16px);
 }
 .landing__img{ position:relative; min-height:0; align-self:stretch; width:100% }
@@ -102,13 +102,24 @@ a:hover{ color:inherit }
 /* ==========================================================================
    Work: the grid — 4 across, centred, scrolls the window.
    ========================================================================== */
-body.work{ height:100svh; overflow:hidden; }
-body.work #main{ overflow-y:auto; min-height:0; scrollbar-width:none; }
+body.work{ height:100svh; overflow:hidden; position:relative; }
+body.work #main{ position:absolute; inset:0; overflow-y:auto; min-height:0; scrollbar-width:none; }
 body.work #main::-webkit-scrollbar{ width:0; height:0; display:none; }
-main.work{ padding:clamp(10px,2vw,28px) var(--pad) clamp(40px,7vw,90px) }
-body.cv{ height:100svh; overflow:hidden; }
-body.cv #main{ overflow-y:auto; min-height:0; scrollbar-width:none; }
+main.work{ padding:clamp(20px,3vw,40px) var(--pad) clamp(60px,9vw,100px) }
+body.cv{ height:100svh; overflow:hidden; position:relative; }
+body.cv #main{ position:absolute; inset:0; overflow-y:auto; min-height:0; scrollbar-width:none; }
 body.cv #main::-webkit-scrollbar{ width:0; height:0; display:none; }
+
+/* Header + footer float over the content on the fixed-screen pages, with a soft fade
+   so the name/nav and copyright stay legible over the painting/grid/cv. */
+body.home .top, body.work .top, body.cv .top{
+  position:absolute; top:0; left:0; right:0; z-index:2;
+  background:linear-gradient(to bottom, rgba(255,255,255,.9), rgba(255,255,255,0));
+}
+body.home .tail, body.work .tail, body.cv .tail{
+  position:absolute; bottom:0; left:0; right:0; z-index:2;
+  background:linear-gradient(to top, rgba(255,255,255,.9), rgba(255,255,255,0));
+}
 .grid{
   display:grid; grid-template-columns:repeat(4, var(--thumb));
   justify-content:center; gap:var(--gap);
@@ -129,14 +140,12 @@ body.cv #main::-webkit-scrollbar{ width:0; height:0; display:none; }
 .overlay{
   position:fixed; inset:0; z-index:50;
   background:var(--paper);
-  display:grid;
-  grid-template-columns:clamp(56px,7vw,96px) minmax(0,1fr) clamp(56px,7vw,96px);
-  align-items:center; justify-items:center;
+  display:flex; align-items:center;
   padding:clamp(10px,2vw,24px);
 }
 .overlay[hidden]{ display:none }
 .overlay__fig{
-  grid-column:2; grid-row:1; justify-self:center;
+  flex:0 0 auto;
   margin:0; display:flex; flex-direction:column; align-items:center;
   gap:clamp(8px,1.2vw,14px); max-width:100%;
 }
@@ -152,14 +161,15 @@ body.cv #main::-webkit-scrollbar{ width:0; height:0; display:none; }
   padding:14px;
 }
 .overlay__x{ position:absolute; top:6px; right:6px }
-.overlay__prev{ grid-column:1; grid-row:1; align-self:stretch; justify-self:stretch; display:flex; align-items:center; justify-content:center; padding:10px }
-.overlay__next{ grid-column:3; grid-row:1; align-self:stretch; justify-self:stretch; display:flex; align-items:center; justify-content:center; padding:10px }
+.overlay__prev{ flex:1 1 0; min-width:0; align-self:stretch; display:flex; align-items:center; justify-content:flex-start; padding:10px 10px 10px clamp(24px,3vw,48px) }
+.overlay__next{ flex:1 1 0; min-width:0; align-self:stretch; display:flex; align-items:center; justify-content:flex-end; padding:10px clamp(24px,3vw,48px) 10px 10px }
 .overlay__x:hover, .overlay__prev:hover, .overlay__next:hover{ color:var(--ink) }
 
 /* ==========================================================================
    Reading pages: the CV.
    ========================================================================== */
 .page{ padding:0 var(--pad) clamp(50px,9vw,120px); max-width:80ch; margin-inline:auto; }
+body.cv .page{ padding-top:clamp(24px,4vw,56px); }
 .page h1{ font-size:var(--fs-name); font-weight:400; letter-spacing:-.015em; line-height:1.06; margin:0 0 4px }
 .page .sub{ font-size:var(--fs-small); color:var(--ink-2); margin:clamp(14px,2.4vw,30px) 0 clamp(20px,3.2vw,42px) }
 .page p{ margin:0 0 1em; max-width:62ch; color:var(--ink-2) }
