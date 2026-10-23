@@ -60,21 +60,24 @@ def css_href(prefix):
 
 # ---------------------------------------------------------------- nav ---
 # Two sections: Work and CV. About is gone (Max, 2026-10-22).
-NAV = [("work", "work/"), ("cv", "cv/")]
+NAV = [("work", "work/", "work.png"), ("cv", "cv/", "cv.png")]
 
 
 def navlinks(prefix, current):
     out = []
-    for label, href in NAV:
+    for label, href, img in NAV:
         cur = ' aria-current="page"' if (href == current and "#" not in href) else ""
         target = R(prefix, href) if href else (prefix or "./")
-        out.append(f'<a href="{target}"{cur}>{esc(label)}</a>')
+        src = R(prefix, f"assets/hand/{img}")
+        out.append(f'<a href="{target}"{cur}><img class="nav-img" src="{src}" alt="{esc(label)}"></a>')
     return "".join(out)
 
 
 def top(prefix, current, as_h1=False):
     """The name top-left, then the two links stacked under it, left aligned."""
-    name = f'<a href="{prefix or "./"}">{esc(S["name"])}</a>'
+    src = R(prefix, "assets/hand/name.png")
+    name = (f'<a href="{prefix or "./"}" class="name-link">'
+            f'<img class="name-img" src="{src}" alt="{esc(S["name"])}"></a>')
     tag = "h1" if as_h1 else "p"
     return f"""<header class="top" id="top">
   <{tag} class="name">{name}</{tag}>
@@ -85,7 +88,9 @@ def top(prefix, current, as_h1=False):
 
 def tail(prefix):
     """Copyright only — the property line and Back to top are gone."""
-    return f'<footer class="tail"><span>&copy; {YEAR} {esc(S["name"])}</span></footer>\n'
+    src = R(prefix, "assets/hand/copyright.png")
+    return (f'<footer class="tail"><img class="tail-img" src="{src}" '
+            f'alt="\u00a9 {YEAR} {esc(S["name"])}"></footer>\n')
 
 
 def head(title, desc, path, prefix, extra="", body_class=""):
@@ -172,7 +177,7 @@ def build_work(prefix=""):
 
 <div class="overlay" id="overlay" hidden>
   <button class="overlay__x" type="button" aria-label="Close">×</button>
-  <button class="overlay__prev" type="button" aria-label="Previous"></button>
+  <button class="overlay__prev" type="button" aria-label="Previous"><img class="arr" src="{R(prefix, 'assets/hand/leftarrow.png')}" alt=""></button>
   <figure class="overlay__fig">
     <picture>
       <source id="ov-src" type="image/webp">
@@ -180,7 +185,7 @@ def build_work(prefix=""):
     </picture>
     <figcaption id="ov-cap"></figcaption>
   </figure>
-  <button class="overlay__next" type="button" aria-label="Next"></button>
+  <button class="overlay__next" type="button" aria-label="Next"><img class="arr" src="{R(prefix, 'assets/hand/rightarrow.png')}" alt=""></button>
 </div>
 
 <script>

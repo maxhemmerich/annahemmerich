@@ -192,3 +192,11 @@ body.cv .page{ padding-top:clamp(24px,4vw,56px); }
 }
 
 @media (prefers-reduced-motion:reduce){ *{ transition:none !important; animation:none !important } }
+
+
+/* ===== handwritten elements (Max, 2026-10-23): the name, nav, copyright and
+   overlay arrows are images of the handwritten sketch, not text ===== */
+.name a img{ height:24px; width:auto; display:block }
+.top__nav a img{ height:17px; width:auto; display:block }
+.tail img{ height:12px; width:auto; display:block }
+.overlay__prev img, .overlay__next img{ height:30px; width:auto }
