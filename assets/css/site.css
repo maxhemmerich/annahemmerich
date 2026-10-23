@@ -130,7 +130,7 @@ body.cv #main::-webkit-scrollbar{ width:0; height:0; display:none; }
   position:fixed; inset:0; z-index:50;
   background:var(--paper);
   display:grid;
-  grid-template-columns:clamp(48px,6vw,80px) minmax(0,1fr) clamp(48px,6vw,80px);
+  grid-template-columns:clamp(56px,7vw,96px) minmax(0,1fr) clamp(56px,7vw,96px);
   align-items:center; justify-items:center;
   padding:clamp(10px,2vw,24px);
 }
@@ -152,8 +152,8 @@ body.cv #main::-webkit-scrollbar{ width:0; height:0; display:none; }
   padding:14px;
 }
 .overlay__x{ position:absolute; top:6px; right:6px }
-.overlay__prev{ grid-column:1; grid-row:1; padding:10px }
-.overlay__next{ grid-column:3; grid-row:1; padding:10px }
+.overlay__prev{ grid-column:1; grid-row:1; align-self:stretch; justify-self:stretch; display:flex; align-items:center; justify-content:center; padding:10px }
+.overlay__next{ grid-column:3; grid-row:1; align-self:stretch; justify-self:stretch; display:flex; align-items:center; justify-content:center; padding:10px }
 .overlay__x:hover, .overlay__prev:hover, .overlay__next:hover{ color:var(--ink) }
 
 /* ==========================================================================
