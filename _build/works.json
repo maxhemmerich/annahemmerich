@@ -438,6 +438,106 @@
     711,
     900
    ]
+  },
+  {
+   "n": 21,
+   "slug": "bridge-gap",
+   "title": "Bridge gap",
+   "medium": "",
+   "dims": "",
+   "year": "",
+   "accent": "#8a8a8a",
+   "ar": 0.75,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1201,
+    1600
+   ],
+   "px900": [
+    675,
+    900
+   ]
+  },
+  {
+   "n": 22,
+   "slug": "half-an-hour-in-florida",
+   "title": "Half an hour in Florida",
+   "medium": "",
+   "dims": "",
+   "year": "",
+   "accent": "#8a8a8a",
+   "ar": 0.751,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1202,
+    1600
+   ],
+   "px900": [
+    676,
+    900
+   ]
+  },
+  {
+   "n": 23,
+   "slug": "red-40",
+   "title": "Red 40",
+   "medium": "",
+   "dims": "",
+   "year": "",
+   "accent": "#8a8a8a",
+   "ar": 0.754,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1207,
+    1600
+   ],
+   "px900": [
+    679,
+    900
+   ]
+  },
+  {
+   "n": 24,
+   "slug": "voice-over",
+   "title": "Voice over",
+   "medium": "",
+   "dims": "",
+   "year": "",
+   "accent": "#8a8a8a",
+   "ar": 0.753,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1205,
+    1600
+   ],
+   "px900": [
+    678,
+    900
+   ]
+  },
+  {
+   "n": 25,
+   "slug": "untitled",
+   "title": "Untitled",
+   "medium": "",
+   "dims": "",
+   "year": "",
+   "accent": "#8a8a8a",
+   "ar": 1.001,
+   "span": 4,
+   "span_m": 6,
+   "px1600": [
+    1600,
+    1598
+   ],
+   "px900": [
+    900,
+    899
+   ]
   }
  ]
 }

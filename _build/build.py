@@ -37,12 +37,25 @@ def esc(s):
 
 
 def cap(w):
-    return f"{w['title']} {w['medium']} {w['dims']}, {w['year']}"
+    out = str(w["title"])
+    if w.get("medium"):
+        out += " " + str(w["medium"])
+    if w.get("dims"):
+        out += " " + str(w["dims"])
+    if w.get("year"):
+        out += ", " + str(w["year"])
+    return out
 
 
 def caption_html(w):
-    return (f'<b>{esc(w["title"])}</b> {esc(w["medium"])} '
-            f'{esc(w["dims"])}, {w["year"]}')
+    out = f'<b>{esc(w["title"])}</b>'
+    if w.get("medium"):
+        out += f' {esc(w["medium"])}'
+    if w.get("dims"):
+        out += f' {esc(w["dims"])}'
+    if w.get("year"):
+        out += f', {w["year"]}'
+    return out
 
 
 def R(prefix, path):
